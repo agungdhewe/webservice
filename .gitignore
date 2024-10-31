@@ -4,3 +4,7 @@
 /dockerbuild
 /plugins
 /vendor
+
+
+log.txt
+debug.txt
