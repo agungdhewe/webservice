@@ -1,0 +1,128 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "1ce99b8f3aa04a63108ce011129ec952",
+    "packages": [
+        {
+            "name": "agungdhewe/phplogger",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agungdhewe/phplogger.git",
+                "reference": "751cd13a80c0b22800d0d2f4add40bd75ebc0e1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agungdhewe/phplogger/zipball/751cd13a80c0b22800d0d2f4add40bd75ebc0e1b",
+                "reference": "751cd13a80c0b22800d0d2f4add40bd75ebc0e1b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AgungDhewe\\PhpLogger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Agung Nugroho",
+                    "email": "agung.dhewe@gmail.com"
+                }
+            ],
+            "description": "logger untuk PHP",
+            "support": {
+                "issues": "https://github.com/agungdhewe/phplogger/issues",
+                "source": "https://github.com/agungdhewe/phplogger/tree/v1.1"
+            },
+            "time": "2024-10-11T12:43:42+00:00"
+        },
+        {
+            "name": "agungdhewe/phpsqlutil",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agungdhewe/phpsqlutil.git",
+                "reference": "fc24fa403f7eb954a2e0f7f3d0951ecb6dbbb443"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agungdhewe/phpsqlutil/zipball/fc24fa403f7eb954a2e0f7f3d0951ecb6dbbb443",
+                "reference": "fc24fa403f7eb954a2e0f7f3d0951ecb6dbbb443",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AgungDhewe\\PhpSqlUtil\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Agung Nugroho",
+                    "email": "agung.dhewe@gmail.com"
+                }
+            ],
+            "description": "Utility for create SQL insert, update and delete",
+            "support": {
+                "issues": "https://github.com/agungdhewe/phpsqlutil/issues",
+                "source": "https://github.com/agungdhewe/phpsqlutil/tree/v1.2.2"
+            },
+            "time": "2024-10-16T13:21:54+00:00"
+        },
+        {
+            "name": "transfashion/registration",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "plugins/transfashion/registration",
+                "reference": "d306b39b09c6ee76764a241812dd722964134677"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Transfashion\\Registration\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Agung Nugroho",
+                    "email": "agung@transfashionindonesia.com"
+                }
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "transfashion/registration": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "^8.3"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "agungdhewe/webservice",
+    "description": "Library webservice untuk membangun platform web (web api, web page, web apps)",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Agung Nugroho",
+            "email": "agung.dhewe@gmail.com"
+        }
+    ],
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "AgungDhewe\\Webservice\\": "src/"
+        }
+    },
+	"repositories": [
+		{
+			"type": "path",
+			"url": "plugins/*/*",
+			"options": { "symlink": true }
+		}
+	],
+	"require": {
+        "php": "^8.3",
+        "agungdhewe/phpsqlutil": "^1.2",
+        "agungdhewe/phplogger": "^1.1",
+		"transfashion/registration": "@dev"
+    }
+}
