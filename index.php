@@ -2,31 +2,36 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use AgungDhewe\Webservice\Configuration;
-use AgungDhewe\PhpLogger\Logger;
-use AgungDhewe\PhpLogger\LoggerOutput;
+use AgungDhewe\Webservice\Database;
+use AgungDhewe\Webservice\Webservice;;
+
+
+// script ini hanya dijalankan di web server
+if (php_sapi_name() === 'cli') {
+	die("Script harus dijalankan di Web Server\n\n");
+}
 
 
 try {
-	$configfile = 'config-production.php';
-	if (php_sapi_name() === 'cli') {
-		// jalan di CLI	
-		die("Script harus dijalankan di Web Server\n\n");
+	$configfile = 'config.php';
+	if (getenv('CONFIG')) {
+		$configfile = getenv('CONFIG');
 	}
-
-	if (getenv('DEBUG')=="true") {
-		$configfile = 'config-development.php';
-	};
 
 	$configpath = implode('/', [__DIR__, $configfile]);
 	if (!is_file($configpath)) {
 		throw new Exception("File '$configfile' tidak ditemukan");
 	}
 
+	echo $configpath;
+
 	require_once $configpath;
 	Configuration::setRootDir(__DIR__);
 	Configuration::setLogger();
 
-	// WebRequest::init();
+	Database::Connect();
+
+	Webservice::main();
 
 } catch (Exception $ex) {
 	header("HTTP/1.1 500 Internal Error");
