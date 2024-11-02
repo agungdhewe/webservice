@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><?=$this->getTitle()?></title>
+		<link rel="stylesheet" href="http://localhost:8005/template/assets/style.css">
+		<?=$this->getBlockContent('header-style')?>
+		<script>
+			var $ui = {};
+		</script>
+		<?=$this->getBlockContent('header-script')?>
+	</head>
+
+	<body>
+		<header>
+			Header
+		</header>
+		<main>
+			<?=$this->getMainContent()?>
+		</main>
+		<footer>
+			Footer
+		</footer>
+	</body>	
+	<?=$this->getBlockContent('footer-script')?>
+</body>

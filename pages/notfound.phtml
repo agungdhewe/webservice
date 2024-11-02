@@ -1,0 +1,10 @@
+<?php 
+if (array_key_exists('errormessage', $CONTENTPARAMS)) {
+	$errormessage = $CONTENTPARAMS['errormessage'];
+} else {
+	$errormessage = "Page not found";
+}
+?>
+
+<?= $errormessage ?>
+

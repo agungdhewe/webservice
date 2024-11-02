@@ -93,9 +93,9 @@ class Configuration
 
 		if ($output == "file") {
 			Logger::SetOutput(LoggerOutput::FILE);
+		} else if ($output == "none") {
+			Logger::SetOutput(LoggerOutput::NONE);
 		} 
-
-		Log::debug("Starting Logger...");
 	}
 
 }

@@ -6,16 +6,16 @@ use AgungDhewe\Webservice\Configuration;
 Configuration::Set([
 	
 	'DbMain' => [
-		'DSN' => "mysql:host=127.0.0.1;dbname=tfidblocal",
+		'DSN' => "mysql:host=127.0.0.1;dbname=webdblocal",
 		'user' => "root",
-		'pass' => "rahasia123!"
+		'pass' => ""
 	],
 
 	'Logger' => [
 		'output' => 'file',
 		'filename' => 'log.txt',
-		'ClearOnStart' => true,
-		'debug' => true,
+		'ClearOnStart' => false,
+		'debug' => false,
 	]
 ]);
 

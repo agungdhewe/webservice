@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ce99b8f3aa04a63108ce011129ec952",
+    "content-hash": "debe58d6e4c27d3439240b3bf87aa939",
     "packages": [
         {
             "name": "agungdhewe/phplogger",
-            "version": "v1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/agungdhewe/phplogger.git",
-                "reference": "751cd13a80c0b22800d0d2f4add40bd75ebc0e1b"
+                "reference": "7c9a52039069a50e70402a840284f22a1cf453ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/agungdhewe/phplogger/zipball/751cd13a80c0b22800d0d2f4add40bd75ebc0e1b",
-                "reference": "751cd13a80c0b22800d0d2f4add40bd75ebc0e1b",
+                "url": "https://api.github.com/repos/agungdhewe/phplogger/zipball/7c9a52039069a50e70402a840284f22a1cf453ac",
+                "reference": "7c9a52039069a50e70402a840284f22a1cf453ac",
                 "shasum": ""
             },
             "require": {
@@ -42,9 +42,9 @@
             "description": "logger untuk PHP",
             "support": {
                 "issues": "https://github.com/agungdhewe/phplogger/issues",
-                "source": "https://github.com/agungdhewe/phplogger/tree/v1.1"
+                "source": "https://github.com/agungdhewe/phplogger/tree/v1.1.2"
             },
-            "time": "2024-10-11T12:43:42+00:00"
+            "time": "2024-11-02T22:20:27+00:00"
         },
         {
             "name": "agungdhewe/phpsqlutil",
@@ -91,7 +91,7 @@
             "version": "dev-main",
             "dist": {
                 "type": "path",
-                "url": "plugins/transfashion/registration",
+                "url": "modules/transfashion/registration",
                 "reference": "d306b39b09c6ee76764a241812dd722964134677"
             },
             "type": "library",

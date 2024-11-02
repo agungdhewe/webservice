@@ -3,8 +3,12 @@
 
 /dockerbuild
 /plugins
+/modules
 /vendor
 
 
 log.txt
 debug.txt
+config-*.php
+
+
