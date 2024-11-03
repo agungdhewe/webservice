@@ -12,6 +12,7 @@ if (php_sapi_name() === 'cli') {
 	die("Script cannot be executed directly from CLI\n\n");
 }
 
+
 try {
 	$configfile = 'config.php';
 	if (getenv('CONFIG')) {

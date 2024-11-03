@@ -43,7 +43,7 @@ class Service {
 					];
 					$urlreq =  implode('/', [PageRoute::PREFIX, PageRoute::PAGE_ERROR]);
 				}
-			}
+			} 
 		}
 	}
 

@@ -2,17 +2,16 @@
 
 use AgungDhewe\PhpLogger\Log;
 
+
+
 abstract class WebTemplate {
 
 	private string $mainContent;
 	private array $blocks;
 
-
-	abstract public function GetTemplateFilepath() : string;
-	abstract public function GetTemplateDir() : string;
-	abstract public function GetAssetUrl() : string;
-
-	// abstract public function Render(string $content) : void;
+	
+	abstract public function GetName() : string;
+	
 
 
 	protected function removeCommentBlocks(string $content) : string {
@@ -78,6 +77,40 @@ abstract class WebTemplate {
 		}
 	}
 
+
+	protected function getBaseUrl() : string {
+		$headers = getallheaders(); 
+		if (array_key_exists('BASE_HREF', $headers)) {
+			return trim($headers['BASE_HREF'], '/');
+		} else if (!empty($baseUrl=Configuration::Get('BaseUrl'))) {
+			return $baseUrl;
+		} else {
+			return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
+		}
+		
+	}
+
+	protected function GetAssetUrl(string $path) : string {
+		$baseUrl = $this->getBaseUrl();
+		$assetUrl = implode('/', [$baseUrl, 'template', $path]);
+		return $assetUrl;
+	}
+
+
+	public function GetTemplateFilepath() : string {
+		$name = $this->GetName();
+		$templatedir = $this->GetTemplateDir();
+		$templatefile = implode('/', [$templatedir, "$name.phtml"]);
+		return $templatefile;
+	}
+
+	public function GetTemplateDir() : string {
+		$name = $this->GetName();
+		$rootDir = Configuration::getRootDir();
+		$templatedir = implode('/', [$rootDir, 'templates', $name]);
+		return $templatedir;
+	}
+
 	public function Render(string $content) : void {
 		$content = $this->removeCommentBlocks($content);
 		$this->mainContent = $this->parseMainContent($content);
@@ -93,16 +126,26 @@ abstract class WebTemplate {
 			throw new \Exception("Template file '$templatefile' not found", 500);
 		}
 
+
+
 		try {
 			ob_start();
-			require_once $templatefile;
+			include_once $templatefile; 
 			$html = ob_get_contents();
 		} catch (\Exception $ex) {
 			$html = $ex->getMessage();
 		} finally {
 			ob_end_clean();
-			echo $html;
+			if (!empty($html)) {
+				echo $html;
+			} else {
+				$filename =  basename($templatefile);
+				Log::error("Error occured when rendering template file '$filename'");
+			}
 		}
 	}
 	
+
+
+
 }

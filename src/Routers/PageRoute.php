@@ -64,17 +64,26 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				throw new \Exception("Page '$requestedPage' not found", 4040);
 			}
 		}
-		
+
+		// 
 		try {
 			ob_start();
 			require_once $pagefile;
 			$content = ob_get_contents();
+			$success = true;
 		} catch (\Exception $ex) {
 			$content = $ex->getMessage();
 		} finally {
 			ob_end_clean();
-		}
-
-		return $content;
+			if (isset($success)) {
+				return $content;
+			} else {
+				$filename =  basename($pagefile);
+				Log::error("Error occured when rendering page file '$filename'");
+				return "";
+			}
+		}		
 	}
+
+
 }
