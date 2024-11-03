@@ -5,6 +5,8 @@ class PlainTemplate extends WebTemplate {
 	const string NAME = "plaintemplate";
 
 
+	
+
 
 	public function GetTemplateFilepath() : string {
 		$templatedir = $this->GetTemplateDir();

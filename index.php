@@ -2,7 +2,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use AgungDhewe\Webservice\Configuration;
-use AgungDhewe\Webservice\Database;
 use AgungDhewe\Webservice\Service;
 
 use AgungDhewe\Webservice\Router;
@@ -28,7 +27,7 @@ try {
 	Configuration::setRootDir(__DIR__);
 	Configuration::setLogger();
 
-	Database::Connect();
+	
 
 	// Route internal
 	// Router::GET('container', 'AgungDhewe\Webservice\Routers\ContainerRoute');

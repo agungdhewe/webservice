@@ -11,7 +11,7 @@ class Database {
 			Log::info("Database Connected.");
 		} catch (\Exception $ex) {
 			Log::error($ex->getMessage());
-			throw $ex;
+			throw new \Exception($ex->getMessage(), 500);
 		}
 	}
 }

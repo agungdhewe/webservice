@@ -13,7 +13,6 @@ class Service {
 		$param = [];
 		$url = $urlreq;
 
-		Log::info("Starting Service...");
 		$iter = 0;
 		$routeComplete = false;
 		while (!$routeComplete) {

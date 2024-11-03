@@ -4,6 +4,8 @@ use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\ServiceRoute;
 use AgungDhewe\Webservice\Configuration;
+use AgungDhewe\Webservice\Database;
+
 
 class PageRoute extends ServiceRoute implements IRouteHandler {
 
@@ -25,6 +27,8 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 		
 		try {
+
+			Database::Connect();
 
 			// get pages directory
 			$pagesDir = Configuration::Get('PagesDir'); 

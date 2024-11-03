@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title><?=$this->getTitle()?></title>
+		<link rel="icon" href="favicon.ico">
 		<link rel="stylesheet" href="http://localhost:8005/template/assets/style.css">
 		<?=$this->getBlockContent('header-style')?>
 		<script>
@@ -15,7 +16,12 @@
 			Header
 		</header>
 		<main>
-			<?=$this->getMainContent()?>
+			<div>
+				<?=$this->getAssetUrl('assets/sampleimage.svg')?>
+			</div>
+			<div>
+				<?=$this->getMainContent()?>
+			</div>
 		</main>
 		<footer>
 			Footer
