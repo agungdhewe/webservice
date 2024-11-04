@@ -11,6 +11,7 @@ abstract class WebTemplate {
 
 	
 	abstract public function GetName() : string;
+	abstract public function GetTemplateDir() : string;
 	
 
 
@@ -104,12 +105,7 @@ abstract class WebTemplate {
 		return $templatefile;
 	}
 
-	public function GetTemplateDir() : string {
-		$name = $this->GetName();
-		$rootDir = Configuration::getRootDir();
-		$templatedir = implode('/', [$rootDir, 'templates', $name]);
-		return $templatedir;
-	}
+
 
 	public function Render(string $content) : void {
 		$content = $this->removeCommentBlocks($content);
