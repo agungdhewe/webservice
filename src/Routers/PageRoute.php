@@ -55,6 +55,13 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 	function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
 		$pagefile = implode('/', [$pagesDir, $requestedPage . ".phtml"]);
+		if ($requestedPage === self::PAGE_NOTFOUND || $requestedPage === self::PAGE_ERROR) {
+			if (!is_file($pagefile)) {
+				$pagefile = implode('/', [__DIR__, '..', '..', 'pages', $requestedPage . ".phtml"]);
+			}
+		}
+		
+		
 		Log::info("load '$pagefile'");
 		if (!is_file($pagefile)) {
 			if ($requestedPage===self::PAGE_ERROR || $requestedPage===self::PAGE_NOTFOUND) {
