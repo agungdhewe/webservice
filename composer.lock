@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "agungdhewe/phplogger",
-            "version": "v1.1.6",
+            "version": "v1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/agungdhewe/phplogger.git",
-                "reference": "a344a65486ee6ec84507f335c23e21cdcb15d004"
+                "reference": "dd4f1d13ab50440bd6029a00155182fa1ce10e22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/agungdhewe/phplogger/zipball/a344a65486ee6ec84507f335c23e21cdcb15d004",
-                "reference": "a344a65486ee6ec84507f335c23e21cdcb15d004",
+                "url": "https://api.github.com/repos/agungdhewe/phplogger/zipball/dd4f1d13ab50440bd6029a00155182fa1ce10e22",
+                "reference": "dd4f1d13ab50440bd6029a00155182fa1ce10e22",
                 "shasum": ""
             },
             "require": {
@@ -42,9 +42,9 @@
             "description": "logger untuk PHP",
             "support": {
                 "issues": "https://github.com/agungdhewe/phplogger/issues",
-                "source": "https://github.com/agungdhewe/phplogger/tree/v1.1.6"
+                "source": "https://github.com/agungdhewe/phplogger/tree/v1.1.7"
             },
-            "time": "2024-11-05T05:39:06+00:00"
+            "time": "2024-11-05T16:08:26+00:00"
         },
         {
             "name": "agungdhewe/phpsqlutil",

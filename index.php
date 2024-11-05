@@ -32,20 +32,11 @@ try {
 	Configuration::setRootDir(__DIR__);
 	Configuration::setLogger();
 
-	
+	// Prepare debug
+	PageRoute::ResetDebugOnPageRequest(["page/*"]);
 
 	// Route internal
-	// Router::GET('container', 'AgungDhewe\Webservice\Routers\ContainerRoute');
-	// Router::GET('login', 'AgungDhewe\Webservice\Routers\LoginRoute');
-	Router::GET('template/*', 'AgungDhewe\Webservice\Routers\TemplateRoute');
-	Router::GET('asset/*', 'AgungDhewe\Webservice\Routers\AssetRoute');
-	Router::GET('page/*', 'AgungDhewe\Webservice\Routers\PageRoute');
-	Router::POST('api/*', 'AgungDhewe\Webservice\Routers\ApiRoute');
-
-	// Route external: akan menggunakan format PSR4
-	Router::GET('module/asset/*', 'AgungDhewe\Webservice\Routers\ModuleAssetRoute');
-	Router::GET('module/page/*', 'AgungDhewe\Webservice\Routers\ModulePageRoute');
-	Router::POST('module/api/*', 'AgungDhewe\Webservice\Routers\ModuleApiRoute');
+	Router::setupDefaultRoutes();
 
 	// Serve url
 	Service::main();

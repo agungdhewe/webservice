@@ -98,6 +98,7 @@ class Configuration
 				// jika debug channel ditemukan, cek apakah channel sesuai dengan header webservice-debug-channel
 				$headers = getallheaders();
 				if (array_key_exists('webservice-debug-channel', $headers)) {
+					Log::info("webservice-debug-channel: ".$headers['webservice-debug-channel']);
 					if ($headers['webservice-debug-channel'] == $debug_channel) {
 						$set_debug_mode = true;
 					}
