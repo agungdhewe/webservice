@@ -1,11 +1,11 @@
-<?php namespace AgungDhewe\Webservice\Routers;
+<?php namespace AgungDhewe\Webservice\Routes;
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\ServiceRoute;
 use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\Database;
-
+use AgungDhewe\Webservice\WebTemplate;
 
 class PageRoute extends ServiceRoute implements IRouteHandler {
 
@@ -18,7 +18,7 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		parent::__construct($urlreq); // contruct dulu parentnya
 	}
 
-	function route(?array $param = []) : void {
+	public function route(?array $param = []) : void {
 		Log::info("Route Page $this->urlreq");
 
 		if (array_key_exists('httpheader', $param)) {
@@ -34,18 +34,28 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 			// get pages directory
 			$pagesDir = Configuration::Get('PagesDir'); 
 			if (empty($pagesDir)) {
-				throw new \Exception("PagesDir in Configuration is empty or not defined", 500);
+				$errmsg = Log::error("PagesDir in Configuration is empty or not defined");
+				throw new \Exception($errmsg, 500);
 			}
 	
 			// get template renderer
 			$tpl = Configuration::Get('WebTemplate');
 			if (empty($tpl)) {
-				throw new \Exception("WebTemplate in Configuration is empty or not defined", 500);
+				$errmsg = Log::error("WebTemplate in Configuration is empty or not defined");
+				throw new \Exception($errmsg, 500);
 			}
+
+			// cek apakah $tpl inherit dari WebTemplate
+			if (!is_subclass_of($tpl, WebTemplate::class)) {
+				$tplclassname = get_class($tpl);
+				$errmsg = Log::error("Class '$tplclassname' not subclass of WebTemplate");
+				throw new \Exception($errmsg, 500);
+			}
+
 
 			$rootDir = Configuration::getRootDir();
 			$pagesDir = implode('/', [$rootDir, $pagesDir]);
-			$requestedPage = $this->getRequestedParameter('page/', $this->urlreq);
+			$requestedPage = ServiceRoute::getRequestedParameter('page/', $this->urlreq);
 			$content = $this->getContent($pagesDir, $requestedPage, $param);
 			$tpl->Render($content);
 		
@@ -54,7 +64,7 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		}
 	}
 
-	function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
+	protected function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
 		$pagefile = implode('/', [$pagesDir, $requestedPage . ".phtml"]);
 		if ($requestedPage === self::PAGE_NOTFOUND || $requestedPage === self::PAGE_ERROR) {
 			if (!is_file($pagefile)) {
@@ -91,6 +101,19 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				return "";
 			}
 		}		
+	}
+
+
+	public static function ResetDebugOnPageRequest() {
+		if (getenv('DEBUG')) {
+			$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : self::DEFAULT_PAGE;
+			$pattern = "page/*";
+			$regexPattern = str_replace('*', '.*', $pattern);
+			$regexPattern = str_replace('/', '\/', $regexPattern); // Escape slashes
+			if (preg_match("/^$regexPattern$/", $urlreq, $matches)) {
+				$_GET['cleardebug'] = 1;
+			}
+		}	
 	}
 
 

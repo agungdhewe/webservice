@@ -1,4 +1,4 @@
-<?php namespace AgungDhewe\Webservice\Routers;
+<?php namespace AgungDhewe\Webservice\Routes;
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\Webservice\IRouteHandler;
@@ -9,7 +9,7 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 		parent::__construct($urlreq); // contruct dulu parentnya
 	}
 
-	function route(?array $param = []) : void {
+	public function route(?array $param = []) : void {
 		Log::info("Route Page $this->urlreq");
 	}
 }

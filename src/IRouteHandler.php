@@ -2,5 +2,5 @@
 
 interface IRouteHandler {	
 	function __construct(string $urlreq);
-	function route(?array $param = []) : void;
+	public function route(?array $param = []) : void;
 }

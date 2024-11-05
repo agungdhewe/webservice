@@ -5,6 +5,7 @@ use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\Service;
 
 use AgungDhewe\Webservice\Router;
+use AgungDhewe\Webservice\Routes\PageRoute;
 
 
 // script ini hanya dijalankan di web server
@@ -13,7 +14,10 @@ if (php_sapi_name() === 'cli') {
 }
 
 
+
 try {
+	PageRoute::ResetDebugOnPageRequest();
+
 	$configfile = 'config.php';
 	if (getenv('CONFIG')) {
 		$configfile = getenv('CONFIG');

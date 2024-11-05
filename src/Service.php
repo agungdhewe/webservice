@@ -1,7 +1,7 @@
 <?php namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
-use AgungDhewe\Webservice\Routers\PageRoute;
+use AgungDhewe\Webservice\Routes\PageRoute;
 
 
 class Service {
@@ -19,7 +19,8 @@ class Service {
 			$iter++;
 			try {
 				if ($iter > self::MAX_ITER) {
-					throw new \Exception("Maximum iteration reached", 500);
+					$errmsg = Log::error("Maximum iteration reached");
+					throw new \Exception($errmsg, 500);
 				}
 
 				$routehandler = Router::createHandle($urlreq);
@@ -51,7 +52,6 @@ class Service {
 	}
 
 	public static function handleHttpException(\Exception $ex) {
-		Log::error($ex->getMessage());
 		$errCode = (string)$ex->getCode();
 		$httpErrorList = [
 			'400' => ['400', 'Bad Request'],

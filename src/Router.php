@@ -1,7 +1,7 @@
 <?php namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
-use AgungDhewe\Webservice\Routers\PageRoute;
+use AgungDhewe\Webservice\Routes\PageRoute;
 
 
 class Router {
@@ -28,10 +28,10 @@ class Router {
 
 
 	public static function setupDefaultRoutes() : void {
-		self::GET('template/*', 'AgungDhewe\Webservice\Routers\TemplateRoute');
-		self::GET('asset/*', 'AgungDhewe\Webservice\Routers\AssetRoute');
-		self::GET('page/*', 'AgungDhewe\Webservice\Routers\PageRoute');
-		self::POST('api/*', 'AgungDhewe\Webservice\Routers\ApiRoute');
+		self::GET('template/*', 'AgungDhewe\Webservice\Routes\TemplateRoute');
+		self::GET('asset/*', 'AgungDhewe\Webservice\Routes\AssetRoute');
+		self::GET('page/*', 'AgungDhewe\Webservice\Routes\PageRoute');
+		self::POST('api/*', 'AgungDhewe\Webservice\Routes\ApiRoute');
 	}
 
 
@@ -59,7 +59,13 @@ class Router {
 		$REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 		
 		if ($urlreq==null) {
-			$urlreq = PageRoute::DEFAULT_PAGE;
+			$indexpage = Configuration::Get('IndexPage');
+			if (!empty($indexpage)) {
+				$urlreq = $indexpage;
+			} else {
+				$urlreq = PageRoute::DEFAULT_PAGE;
+			}
+			
 		}
 
 		if ($REQUEST_METHOD==='GET') {
@@ -75,23 +81,27 @@ class Router {
 			if ($REQUEST_METHOD==='GET') {
 				$routedata = ['classname' => 'AgungDhewe\Webservice\Routers\PageRoute'];
 			} else {
-				throw new \Exception("$REQUEST_METHOD request to '$urlreq' is not allowed", 405);
+				$errmsg = Log::error("$REQUEST_METHOD request to '$urlreq' is not allowed");
+				throw new \Exception($errmsg, 405);
 			}
 		}
 
 		$classname = $routedata['classname'];
 		if (!class_exists($classname)) {
-			throw new \Exception("Class '$classname' not found", 500);
+			$errmsg = Log::error("Class '$classname' not found");
+			throw new \Exception($errmsg, 500);
 		}
 		
 		// check if class implements IRouteHandler
 		if (!in_array(IRouteHandler::class, class_implements($classname))) {
-			throw new \Exception("Class '$classname' not implements IRouteHandler", 500);
+			$errmsg = Log::error("Class '$classname' not implements IRouteHandler");
+			throw new \Exception($errmsg, 500);
 		}
 
 		// check if class is subclass of ServiceRoute
 		if (!is_subclass_of($classname, ServiceRoute::class)) {
-			throw new \Exception("Class '$classname' not subclass of ServiceRoute", 500);
+			$errmsg = Log::error("Class '$classname' not subclass of ServiceRoute");
+			throw new \Exception($errmsg, 500);
 		}
 
 		$route = new $classname($urlreq);

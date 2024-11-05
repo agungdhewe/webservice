@@ -56,14 +56,14 @@ abstract class WebTemplate {
 		} 
 		
 		if (!is_dir($dir)) {
-			log::error("Directory '$dir' not found");
-			throw new \Exception("Directory '$dir' not found", 500);
+			$errmsg = Log::error("Directory '$dir' not found");
+			throw new \Exception($errmsg, 500);
 		}
 
 		$filepath = implode('/', [$dir, $filename]);
 		if (!is_file($filepath)) {
-			log::error("File '$filepath' not found");
-			throw new \Exception("File '$filepath' not found", 500);
+			$errmsg = Log::error("File '$filepath' not found");
+			throw new \Exception($errmsg, 500);
 		}
 
 		require_once $filepath;
@@ -114,12 +114,14 @@ abstract class WebTemplate {
 
 		$templatedir = $this->GetTemplateDir();
 		if (!is_dir($templatedir)) {
-			throw new \Exception("Template directory '$templatedir' not found", 500);
+			$errmsg = Log::error("Template directory '$templatedir' not found");
+			throw new \Exception($errmsg, 500);
 		}
 
 		$templatefile = $this->GetTemplateFilepath();
 		if (!is_file($templatefile)) {
-			throw new \Exception("Template file '$templatefile' not found", 500);
+			$errmsg = Log::error("Template file '$templatefile' not found");
+			throw new \Exception($errmsg, 500);
 		}
 
 
