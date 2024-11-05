@@ -45,13 +45,12 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				throw new \Exception($errmsg, 500);
 			}
 
-			// cek apakah $tpl inherit dari WebTemplate
-			if (!is_subclass_of($tpl, WebTemplate::class)) {
+
+			if (!WebTemplate::Validate($tpl)) {
 				$tplclassname = get_class($tpl);
 				$errmsg = Log::error("Class '$tplclassname' not subclass of WebTemplate");
 				throw new \Exception($errmsg, 500);
 			}
-
 
 			$rootDir = Configuration::getRootDir();
 			$pagesDir = implode('/', [$rootDir, $pagesDir]);

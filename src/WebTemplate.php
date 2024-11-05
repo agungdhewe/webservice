@@ -144,6 +144,13 @@ abstract class WebTemplate {
 	}
 	
 
+	public static function Validate(object $tpl) : bool {
+		if (is_subclass_of($tpl, self::class)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 
 }
