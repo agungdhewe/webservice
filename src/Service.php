@@ -12,6 +12,7 @@ class Service {
 		$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : null;
 		$param = [];
 
+
 		$iter = 0;
 		$routeComplete = false;
 		while (!$routeComplete) {
