@@ -89,7 +89,24 @@ class Configuration
 		}	
 
 		if ($debugmode) {
-			Logger::SetDebugMode(true);
+			$set_debug_mode = false;
+			$debug_channel = Configuration::Get("Logger.debug_channel");
+			if (empty($debug_channel)) {
+				// jika debug channel tidak ditemukan, otomatis debug on;
+				$set_debug_mode = true;
+			} else {
+				// jika debug channel ditemukan, cek apakah channel sesuai dengan header webservice-debug-channel
+				$headers = getallheaders();
+				if (array_key_exists('webservice-debug-channel', $headers)) {
+					if ($headers['webservice-debug-channel'] == $debug_channel) {
+						$set_debug_mode = true;
+					}
+				}
+			}
+
+			if ($set_debug_mode) {
+				Logger::SetDebugMode(true); // set debug mode, clear debug apabila ada parameter $_GET['cleardebug'] = 1
+			}
 		}
 
 		if ($show_callerfile_on_info==true) {

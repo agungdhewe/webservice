@@ -1,6 +1,7 @@
 <?php namespace AgungDhewe\Webservice\Routes;
 
 use AgungDhewe\PhpLogger\Log;
+use AgungDhewe\PhpLogger\Logger;
 use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\ServiceRoute;
 use AgungDhewe\Webservice\Configuration;
@@ -103,14 +104,25 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 	}
 
 
-	public static function ResetDebugOnPageRequest() {
+	public static function ResetDebugOnPageRequest(?array $patterns = ["page/*"]) : void {
 		if (getenv('DEBUG')) {
-			$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : self::DEFAULT_PAGE;
-			$pattern = "page/*";
-			$regexPattern = str_replace('*', '.*', $pattern);
-			$regexPattern = str_replace('/', '\/', $regexPattern); // Escape slashes
-			if (preg_match("/^$regexPattern$/", $urlreq, $matches)) {
-				$_GET['cleardebug'] = 1;
+			$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : null;
+ 			$defaultPage = Configuration::Get('IndexPage');
+			if (empty($defaultPage)) {
+				$defaultPage = self::DEFAULT_PAGE;
+			}
+
+			if (empty($urlreq)) {
+				$urlreq = $defaultPage;
+			}
+			
+			foreach ($patterns as $pattern) {
+				$regexPattern = str_replace('*', '.*', $pattern);
+				$regexPattern = str_replace('/', '\/', $regexPattern); // Escape slashes
+				if (preg_match("/^$regexPattern$/", $urlreq, $matches)) {
+					Logger::clearDebug();
+					break;
+				}
 			}
 		}	
 	}
