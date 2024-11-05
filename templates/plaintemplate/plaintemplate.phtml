@@ -3,7 +3,8 @@
 	<head>
 		<title><?=$this->getTitle()?></title>
 		<link rel="icon" href="favicon.ico">
-		<link rel="stylesheet" href="http://localhost:8005/template/assets/style.css">
+		<link rel="stylesheet" href="<?=$this->getAssetUrl('assets/style.css')?>">
+		<?=$this->getBlockContent('header-metadata')?>
 		<?=$this->getBlockContent('header-style')?>
 		<script>
 			var $ui = {};
@@ -13,18 +14,14 @@
 
 	<body>
 		<header>
-			Header
+			<h1>Plain Web Template</h1>
+			<nav></nav>
 		</header>
 		<main>
-			<div>
-				<img src="<?=$this->getAssetUrl('assets/sampleimage.svg')?>" alt="sample image">
-			</div>
-			<div style="border: 1px solid black">
-				<?=$this->getMainContent()?>
-			</div>
+			<?=$this->getMainContent()?>
 		</main>
 		<footer>
-			Footer
+			<p>Copyright &copy; <?=date('Y')?>. All rights reserved.</p>
 		</footer>
 	</body>	
 	<?=$this->getBlockContent('footer-script')?>

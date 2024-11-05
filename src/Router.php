@@ -1,7 +1,7 @@
 <?php namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
-use \AgungDhewe\Webservice\Routers\PageRoute;
+use AgungDhewe\Webservice\Routers\PageRoute;
 
 
 class Router {
@@ -24,6 +24,14 @@ class Router {
 				"classname" => $serviceRouteClassName
 			];
 		}
+	}
+
+
+	public static function setupDefaultRoutes() : void {
+		self::GET('template/*', 'AgungDhewe\Webservice\Routers\TemplateRoute');
+		self::GET('asset/*', 'AgungDhewe\Webservice\Routers\AssetRoute');
+		self::GET('page/*', 'AgungDhewe\Webservice\Routers\PageRoute');
+		self::POST('api/*', 'AgungDhewe\Webservice\Routers\ApiRoute');
 	}
 
 
@@ -51,7 +59,7 @@ class Router {
 		$REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 		
 		if ($urlreq==null) {
-			$urlreq = 'page/home';
+			$urlreq = PageRoute::DEFAULT_PAGE;
 		}
 
 		if ($REQUEST_METHOD==='GET') {

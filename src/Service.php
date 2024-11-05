@@ -11,7 +11,6 @@ class Service {
 	public static function main() {
 		$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : null;
 		$param = [];
-		$url = $urlreq;
 
 		$iter = 0;
 		$routeComplete = false;
@@ -45,6 +44,9 @@ class Service {
 				}
 			} 
 		}
+
+
+		
 	}
 
 	public static function handleHttpException(\Exception $ex) {

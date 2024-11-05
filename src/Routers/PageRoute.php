@@ -12,6 +12,7 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 	const PREFIX = 'page';
 	const PAGE_NOTFOUND = 'notfound';
 	const PAGE_ERROR = 'error';
+	const DEFAULT_PAGE = 'page/home';
 
 	function __construct(string $urlreq) {
 		parent::__construct($urlreq); // contruct dulu parentnya

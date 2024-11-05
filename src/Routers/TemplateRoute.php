@@ -11,7 +11,7 @@ class TemplateRoute extends AssetRoute implements IRouteHandler {
 	}
 
 	function route(?array $param = []) : void {
-		Log::info("Route Page $this->urlreq");
+		Log::info("Route Template $this->urlreq");
 
 		try {
 

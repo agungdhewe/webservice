@@ -82,6 +82,7 @@ class Configuration
 		$clearlog = Configuration::Get("Logger.ClearOnStart");
 		$output = Configuration::Get("Logger.output");
 		$debugmode = Configuration::Get("Logger.debug");
+		$show_callerfile_on_info = Configuration::Get("Logger.show_callerfile_on_info");
 
 		if ($clearlog) {
 			file_put_contents(Configuration::Get("Logger.filename"), "");
@@ -89,6 +90,10 @@ class Configuration
 
 		if ($debugmode) {
 			Logger::SetDebugMode(true);
+		}
+
+		if ($show_callerfile_on_info==true) {
+			Logger::ShowCallerFileOnInfo(true);
 		}
 
 		if ($output == "file") {
