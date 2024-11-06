@@ -6,6 +6,7 @@
 /modules
 /vendor
 
+composer.lock
 
 log.txt
 debug.txt
