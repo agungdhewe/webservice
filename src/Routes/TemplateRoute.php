@@ -18,7 +18,7 @@ class TemplateRoute extends AssetRoute implements IRouteHandler {
 			// get current template renderer
 			$tpl = Configuration::Get('WebTemplate');
 			if (empty($tpl)) {
-				$errmsg = log::error("WebTemplate in Configuration is empty or not defined");
+				$errmsg = Log::error("WebTemplate in Configuration is empty or not defined");
 				throw new \Exception($errmsg, 500);
 			}
 

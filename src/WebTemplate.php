@@ -6,8 +6,9 @@ use AgungDhewe\PhpLogger\Log;
 
 abstract class WebTemplate {
 
-	private string $mainContent;
-	private array $blocks;
+	private string $_title = "default page title";
+	private string $_mainContent;
+	private array $_blocks;
 
 	
 	abstract public function GetName() : string;
@@ -15,19 +16,19 @@ abstract class WebTemplate {
 	
 
 
-	protected function removeCommentBlocks(string $content) : string {
+	public static function removeCommentBlocks(string $content) : string {
 		$cleaned_content = preg_replace('/\{\*.*?\*\}/s', '', $content);
 		return $cleaned_content;
 	}
 
-	protected function parseMainContent(string $content) : string {
+	public static function parseMainContent(string $content) : string {
 		$pattern = '/\{block name="[^"]*".*?{\/block}/s';
 		$content_without_blocks = preg_replace($pattern, '', $content);
 		$content_without_blocks = trim($content_without_blocks);
 		return $content_without_blocks;
 	} 
 
-	protected function parseBlocks(string $content) : array {
+	public static function parseBlocks(string $content) : array {
 		$blocks = [];
 		$pattern_block = '/\{block name="([^"]+)"\}(.*?)\{\/block\}/s';
 		preg_match_all($pattern_block, $content, $matches);
@@ -38,12 +39,12 @@ abstract class WebTemplate {
 	}
 
 	protected function getMainContent() : string {
-		return $this->mainContent;
+		return $this->_mainContent;
 	}
 
 	protected function getBlockContent(string $blokname) : string {
-		if (array_key_exists($blokname, $this->blocks)) {
-			return $this->blocks[$blokname];
+		if (array_key_exists($blokname, $this->_blocks)) {
+			return $this->_blocks[$blokname];
 		} else {
 			return '';
 		}
@@ -70,11 +71,17 @@ abstract class WebTemplate {
 	}
 
 
+	public function setTitle(string $title) : void {
+		$this->_title = $title;
+	}
+
 	protected function getTitle() : string {
-		if (array_key_exists('title', $this->blocks)) {
-			return $this->blocks['title'];
+		if (!empty($this->_title)) {
+			return $this->_title;
+		} else if (array_key_exists('title', $this->_blocks)) {
+			return $this->_blocks['title'];
 		} else {
-			return "title";
+			return "";
 		}
 	}
 
@@ -108,9 +115,9 @@ abstract class WebTemplate {
 
 
 	public function Render(string $content) : void {
-		$content = $this->removeCommentBlocks($content);
-		$this->mainContent = $this->parseMainContent($content);
-		$this->blocks = $this->parseBlocks($content);
+		$content = self::removeCommentBlocks($content);
+		$this->_mainContent = self::parseMainContent($content);
+		$this->_blocks = self::parseBlocks($content);
 
 		$templatedir = $this->GetTemplateDir();
 		if (!is_dir($templatedir)) {

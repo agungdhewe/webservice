@@ -6,6 +6,7 @@ use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\ServiceRoute;
 use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\Database;
+use AgungDhewe\Webservice\PlainTemplate;
 use AgungDhewe\Webservice\WebTemplate;
 
 class PageRoute extends ServiceRoute implements IRouteHandler {
@@ -14,6 +15,12 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 	const PAGE_NOTFOUND = 'notfound';
 	const PAGE_ERROR = 'error';
 	const DEFAULT_PAGE = 'page/home';
+
+
+	private static array $_DATA = [];
+	private static object $_TPL;
+
+
 
 	function __construct(string $urlreq) {
 		parent::__construct($urlreq); // contruct dulu parentnya
@@ -42,8 +49,9 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 			// get template renderer
 			$tpl = Configuration::Get('WebTemplate');
 			if (empty($tpl)) {
-				$errmsg = Log::error("WebTemplate in Configuration is empty or not defined");
-				throw new \Exception($errmsg, 500);
+				$tpl = new PlainTemplate();
+				// $errmsg = Log::error("WebTemplate in Configuration is empty or not defined");
+				// throw new \Exception($errmsg, 500);
 			}
 
 
@@ -107,6 +115,10 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 	public static function ResetDebugOnPageRequest(?array $patterns = ["page/*"]) : void {
 		if (getenv('DEBUG')) {
 			$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : null;
+			if (in_array($urlreq, ['page/error', 'page/notfound'])) {
+				return;
+			}
+
  			$defaultPage = Configuration::Get('IndexPage');
 			if (empty($defaultPage)) {
 				$defaultPage = self::DEFAULT_PAGE;
@@ -127,5 +139,21 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		}	
 	}
 
+
+	protected static function SetTemplate(object $tpl) : void {
+		self::$_TPL = $tpl;
+	}
+
+	public static function GetTemplate() : object {
+		return self::$_TPL;
+	}
+
+	protected static function SetData(array $data) : void {
+		self::$_DATA = $data;
+	}
+
+	public static function GetData() : array {
+		return self::$_DATA;
+	}
 
 }
