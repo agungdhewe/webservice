@@ -103,7 +103,7 @@ class Configuration
 		
 		if ($debugmode) {
 			$set_debug_mode = false;
-			$debug_channel = Configuration::Get("Logger.DebugChannel");
+			$debug_channel = Configuration::Get("Logger.debugChannel");
 			if (empty($debug_channel)) {
 				// jika debug channel tidak ditemukan, otomatis debug on;
 				$set_debug_mode = true;
