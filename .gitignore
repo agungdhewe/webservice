@@ -5,6 +5,7 @@
 /plugins
 /modules
 /vendor
+/logs
 
 composer.lock
 
