@@ -9,6 +9,8 @@ class Configuration
 	const string SPARATOR = ".";
 	const string DB_MAIN = "DbMain";	
 
+	const string DEBUG_CHANNEL_NAME = 'webservice-debug-channel';
+
 	const array DB_PARAM = [
 		\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 		\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -78,16 +80,27 @@ class Configuration
 
 	public static function setLogger() : void {
 		$logfilename = Configuration::Get("Logger.filename");
-		// $logfilepath = implode('/', [Configuration::getRootDir(), $logfilename]);
-		$clearlog = Configuration::Get("Logger.clearOnStart");
+		$logfilepath = implode('/', [Configuration::getRootDir(), $logfilename]);
+		$maxLogSize = Configuration::Get("Logger.maxLogSize");
 		$output = Configuration::Get("Logger.output");
 		$debugmode = Configuration::Get("Logger.debug");
 		$showCallerFileOnInfo = Configuration::Get("Logger.showCallerFileOnInfo");
 
-		if ($clearlog) {
-			file_put_contents(Configuration::Get("Logger.filename"), "");
+
+		// rotate_log_file, apabila log file telah melebihi ukuran yang ditentukan
+		$logSize = filesize($logfilepath);
+		if ($logSize > $maxLogSize) {
+			$logsArchieveDir = implode('/', [Configuration::getRootDir(), "logs"]);
+			if (!is_dir($logsArchieveDir)) {
+				mkdir($logsArchieveDir);
+			}
+			$logsArchieveFileName = "log-" . date('YmdHis') . ".txt";
+			$logsArchievePath = implode('/', [$logsArchieveDir, $logsArchieveFileName ]);
+			copy($logfilepath, $logsArchievePath);
+			file_put_contents($logfilepath, "");
 		}	
 
+		
 		if ($debugmode) {
 			$set_debug_mode = false;
 			$debug_channel = Configuration::Get("Logger.DebugChannel");
@@ -97,9 +110,9 @@ class Configuration
 			} else {
 				// jika debug channel ditemukan, cek apakah channel sesuai dengan header webservice-debug-channel
 				$headers = getallheaders();
-				if (array_key_exists('webservice-debug-channel', $headers)) {
-					Log::info("webservice-debug-channel: ".$headers['webservice-debug-channel']);
-					if ($headers['webservice-debug-channel'] == $debug_channel) {
+				if (array_key_exists(self::DEBUG_CHANNEL_NAME, $headers)) {
+					Log::info(self::DEBUG_CHANNEL_NAME . ": ".$headers[self::DEBUG_CHANNEL_NAME]);
+					if ($headers[self::DEBUG_CHANNEL_NAME] == $debug_channel) {
 						$set_debug_mode = true;
 					}
 				}
