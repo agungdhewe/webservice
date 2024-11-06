@@ -61,7 +61,7 @@ abstract class WebTemplate {
 			throw new \Exception($errmsg, 500);
 		}
 
-		$filepath = implode('/', [$dir, $filename]);
+		$filepath = implode(DIRECTORY_SEPARATOR, [$dir, $filename]);
 		if (!is_file($filepath)) {
 			$errmsg = Log::error("File '$filepath' not found");
 			throw new \Exception($errmsg, 500);
@@ -95,7 +95,12 @@ abstract class WebTemplate {
 		} else {
 			return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
 		}
-		
+	}
+
+	protected function getUrl(string $path) : string {
+		$baseUrl = $this->getBaseUrl();
+		$$url = implode('/', [$baseUrl, $path]);
+		return $url;
 	}
 
 	protected function GetAssetUrl(string $path) : string {
@@ -108,7 +113,7 @@ abstract class WebTemplate {
 	public function GetTemplateFilepath() : string {
 		$name = $this->GetName();
 		$templatedir = $this->GetTemplateDir();
-		$templatefile = implode('/', [$templatedir, "$name.phtml"]);
+		$templatefile = implode(DIRECTORY_SEPARATOR, [$templatedir, "$name.phtml"]);
 		return $templatefile;
 	}
 

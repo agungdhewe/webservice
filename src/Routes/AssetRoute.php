@@ -28,7 +28,7 @@ class AssetRoute extends ServiceRoute implements IRouteHandler {
 
 
 	protected function sendAsset(string $assetDir, string $requestedFile) : void {
-		$assetpath = implode('/', [$assetDir, $requestedFile]);
+		$assetpath = implode(DIRECTORY_SEPARATOR, [$assetDir, $requestedFile]);
 
 		try {
 			$contenttype = $this->getContentType($requestedFile);

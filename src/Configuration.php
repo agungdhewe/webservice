@@ -80,7 +80,7 @@ class Configuration
 
 	public static function setLogger() : void {
 		$logfilename = Configuration::Get("Logger.filename");
-		$logfilepath = implode('/', [Configuration::getRootDir(), $logfilename]);
+		$logfilepath = implode(DIRECTORY_SEPARATOR, [Configuration::getRootDir(), $logfilename]);
 		$maxLogSize = Configuration::Get("Logger.maxLogSize");
 		$output = Configuration::Get("Logger.output");
 		$debugmode = Configuration::Get("Logger.debug");
@@ -90,12 +90,12 @@ class Configuration
 		// rotate_log_file, apabila log file telah melebihi ukuran yang ditentukan
 		$logSize = filesize($logfilepath);
 		if ($logSize > $maxLogSize) {
-			$logsArchieveDir = implode('/', [Configuration::getRootDir(), "logs"]);
+			$logsArchieveDir = implode(DIRECTORY_SEPARATOR, [Configuration::getRootDir(), "logs"]);
 			if (!is_dir($logsArchieveDir)) {
 				mkdir($logsArchieveDir);
 			}
 			$logsArchieveFileName = "log-" . date('YmdHis') . ".txt";
-			$logsArchievePath = implode('/', [$logsArchieveDir, $logsArchieveFileName ]);
+			$logsArchievePath = implode(DIRECTORY_SEPARATOR, [$logsArchieveDir, $logsArchieveFileName ]);
 			copy($logfilepath, $logsArchievePath);
 			file_put_contents($logfilepath, "");
 		}	

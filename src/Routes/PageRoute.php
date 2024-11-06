@@ -50,8 +50,7 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 			$tpl = Configuration::Get('WebTemplate');
 			if (empty($tpl)) {
 				$tpl = new PlainTemplate();
-				// $errmsg = Log::error("WebTemplate in Configuration is empty or not defined");
-				// throw new \Exception($errmsg, 500);
+				Log::warning("WebTemplate in Configuration is empty or not defined, using standard PlainTemplate.");
 			}
 
 
@@ -62,7 +61,7 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 			}
 
 			$rootDir = Configuration::getRootDir();
-			$pagesDir = implode('/', [$rootDir, $pagesDir]);
+			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
 			$requestedPage = ServiceRoute::getRequestedParameter('page/', $this->urlreq);
 			$content = $this->getContent($pagesDir, $requestedPage, $param);
 			$tpl->Render($content);
@@ -73,10 +72,11 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 	}
 
 	protected function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
-		$pagefile = implode('/', [$pagesDir, $requestedPage . ".phtml"]);
+		$pagefile = implode(DIRECTORY_SEPARATOR, [$pagesDir, $requestedPage . ".phtml"]);
 		if ($requestedPage === self::PAGE_NOTFOUND || $requestedPage === self::PAGE_ERROR) {
 			if (!is_file($pagefile)) {
-				$pagefile = implode('/', [__DIR__, '..', '..', 'pages', $requestedPage . ".phtml"]);
+				$pagefile = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'pages', $requestedPage . ".phtml"]);
+				$pagefile = realpath($pagefile);
 			}
 		}
 		

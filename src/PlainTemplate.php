@@ -11,7 +11,7 @@ class PlainTemplate extends WebTemplate {
 	public function GetTemplateDir() : string {
 		$name = $this->GetName();
 		$rootDir = Configuration::getRootDir();
-		$templatedir = implode('/', [__DIR__, '..', 'templates', $name]);
+		$templatedir = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'templates', $name]);
 		return $templatedir;
 	}
 
