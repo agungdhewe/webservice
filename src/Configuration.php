@@ -79,10 +79,10 @@ class Configuration
 	public static function setLogger() : void {
 		$logfilename = Configuration::Get("Logger.filename");
 		// $logfilepath = implode('/', [Configuration::getRootDir(), $logfilename]);
-		$clearlog = Configuration::Get("Logger.ClearOnStart");
+		$clearlog = Configuration::Get("Logger.clearOnStart");
 		$output = Configuration::Get("Logger.output");
 		$debugmode = Configuration::Get("Logger.debug");
-		$show_callerfile_on_info = Configuration::Get("Logger.show_callerfile_on_info");
+		$showCallerFileOnInfo = Configuration::Get("Logger.showCallerFileOnInfo");
 
 		if ($clearlog) {
 			file_put_contents(Configuration::Get("Logger.filename"), "");
@@ -90,7 +90,7 @@ class Configuration
 
 		if ($debugmode) {
 			$set_debug_mode = false;
-			$debug_channel = Configuration::Get("Logger.debug_channel");
+			$debug_channel = Configuration::Get("Logger.DebugChannel");
 			if (empty($debug_channel)) {
 				// jika debug channel tidak ditemukan, otomatis debug on;
 				$set_debug_mode = true;
@@ -110,7 +110,7 @@ class Configuration
 			}
 		}
 
-		if ($show_callerfile_on_info==true) {
+		if ($showCallerFileOnInfo==true) {
 			Logger::ShowCallerFileOnInfo(true);
 		}
 
