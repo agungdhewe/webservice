@@ -79,7 +79,7 @@ class Router {
 		$routedata = self::getRouteData($urlreq, $routes);	
 		if ($routedata==null) {
 			if ($REQUEST_METHOD==='GET') {
-				$routedata = ['classname' => 'AgungDhewe\Webservice\Routers\PageRoute'];
+				$routedata = ['classname' => 'AgungDhewe\Webservice\Routes\PageRoute'];
 			} else {
 				$errmsg = Log::error("$REQUEST_METHOD request to '$urlreq' is not allowed");
 				throw new \Exception($errmsg, 405);
