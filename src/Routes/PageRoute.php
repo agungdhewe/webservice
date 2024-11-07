@@ -8,13 +8,12 @@ use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\Database;
 use AgungDhewe\Webservice\PlainTemplate;
 use AgungDhewe\Webservice\WebTemplate;
+use AgungDhewe\Webservice\Page;
 
 class PageRoute extends ServiceRoute implements IRouteHandler {
 
 	const PREFIX = 'page';
-	const PAGE_NOTFOUND = 'notfound';
-	const PAGE_ERROR = 'error';
-	const DEFAULT_PAGE = 'page/home';
+
 
 
 	private static array $_DATA = [];
@@ -38,21 +37,9 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		try {
 
 			Database::Connect();
-
-			// get pages directory
-			$pagesDir = Configuration::Get('PagesDir'); 
-			if (empty($pagesDir)) {
-				$errmsg = Log::error("PagesDir in Configuration is empty or not defined");
-				throw new \Exception($errmsg, 500);
-			}
-	
-			// get template renderer
-			$tpl = Configuration::Get('WebTemplate');
-			if (empty($tpl)) {
-				$tpl = new PlainTemplate();
-				Log::warning("WebTemplate in Configuration is empty or not defined, using standard PlainTemplate.");
-			}
-
+			
+			$module = new Page();
+			$tpl = $module->getTemplate([]);
 
 			if (!WebTemplate::Validate($tpl)) {
 				$tplclassname = get_class($tpl);
@@ -60,10 +47,31 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				throw new \Exception($errmsg, 500);
 			}
 
-			$rootDir = Configuration::getRootDir();
-			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
-			$requestedPage = ServiceRoute::getRequestedParameter('page/', $this->urlreq);
-			$content = $this->getContent($pagesDir, $requestedPage, $param);
+
+			
+
+			$content = "";
+			try {
+				self::SetTemplate($tpl);
+				ob_start();
+
+				$requestedPage = ServiceRoute::getRequestedParameter('page/', $this->urlreq);
+				$module->LoadPage($requestedPage, $param);
+				$data = $module->getData();
+				self::SetData($data);
+
+				$title = $module->getTitle();
+				$tpl->setTitle($title);
+
+				$content = ob_get_contents();
+			} catch (\Exception $ex) {
+				$errmsg = Log::error($ex->getMessage());
+				throw new \Exception($errmsg, $ex->getCode());
+			} finally {
+				ob_end_clean();
+			}
+	
+			// $content = $this->getContent($pagesDir, $requestedPage, $param);			
 			$tpl->Render($content);
 		
 		} catch (\Exception $ex) {
@@ -71,45 +79,46 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		}
 	}
 
-	protected function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
-		$pagefile = implode(DIRECTORY_SEPARATOR, [$pagesDir, $requestedPage . ".phtml"]);
-		if ($requestedPage === self::PAGE_NOTFOUND || $requestedPage === self::PAGE_ERROR) {
-			if (!is_file($pagefile)) {
-				$pagefile = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'pages', $requestedPage . ".phtml"]);
-				$pagefile = realpath($pagefile);
-			}
-		}
+	// protected function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
+	// 	$pagefile = implode(DIRECTORY_SEPARATOR, [$pagesDir, $requestedPage . ".phtml"]);
+	// 	if ($requestedPage === self::PAGE_NOTFOUND || $requestedPage === self::PAGE_ERROR) {
+	// 		if (!is_file($pagefile)) {
+	// 			$pagefile = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'pages', $requestedPage . ".phtml"]);
+	// 			$pagefile = realpath($pagefile);
+	// 		}
+	// 	}
 		
 		
-		Log::info("load '$pagefile'");
-		if (!is_file($pagefile)) {
-			if ($requestedPage===self::PAGE_ERROR || $requestedPage===self::PAGE_NOTFOUND) {
-				throw new \Exception("Internal Error Page '$requestedPage' not available", 500);
-			} else {
-				Log::error("Page '$requestedPage' not found");
-				throw new \Exception("Page '$requestedPage' not found", 4040);
-			}
-		}
+	// 	Log::info("load '$pagefile'");
+	// 	if (!is_file($pagefile)) {
+	// 		if ($requestedPage===self::PAGE_ERROR || $requestedPage===self::PAGE_NOTFOUND) {
+	// 			throw new \Exception("Internal Error Page '$requestedPage' not available", 500);
+	// 		} else {
+	// 			Log::error("Page '$requestedPage' not found");
+	// 			throw new \Exception("Page '$requestedPage' not found", 4040);
+	// 		}
+	// 	}
 
-		// 
-		try {
-			ob_start();
-			require_once $pagefile;
-			$content = ob_get_contents();
-			$success = true;
-		} catch (\Exception $ex) {
-			$content = $ex->getMessage();
-		} finally {
-			ob_end_clean();
-			if (isset($success)) {
-				return $content;
-			} else {
-				$filename =  basename($pagefile);
-				Log::error("Error occured when rendering page file '$filename'");
-				return "";
-			}
-		}		
-	}
+	// 	// 
+	// 	try {
+	// 		ob_start();
+	// 		require_once $pagefile;
+	// 		$content = ob_get_contents();
+	// 		$success = true;
+	// 	} catch (\Exception $ex) {
+	// 		$content = $ex->getMessage();
+	// 	} finally {
+	// 		ob_end_clean();
+	// 		if (isset($success)) {
+	// 			return $content;
+	// 		} else {
+	// 			$filename =  basename($pagefile);
+	// 			Log::error("Error occured when rendering page file '$filename'");
+	// 			$content = fread($pagefile, filesize($pagefile));
+	// 			return $content;
+	// 		}
+	// 	}		
+	// }
 
 
 	public static function ResetDebugOnPageRequest(?array $patterns = ["page/*"]) : void {

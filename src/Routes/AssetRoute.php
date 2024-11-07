@@ -1,6 +1,7 @@
 <?php namespace AgungDhewe\Webservice\Routes;
 
 use AgungDhewe\PhpLogger\Log;
+use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\ServiceRoute;
 
@@ -23,7 +24,22 @@ class AssetRoute extends ServiceRoute implements IRouteHandler {
 	}
 
 	public function route(?array $param = []) : void {
-		Log::info("Route Page $this->urlreq");
+		Log::info("Route Asset $this->urlreq");
+
+		try {
+
+			$rootDir = Configuration::getRootDir();
+			$requestedAsset = ServiceRoute::getRequestedParameter('asset/', $this->urlreq);
+			$requestedPath = implode(DIRECTORY_SEPARATOR, [$rootDir, $requestedAsset]);
+
+			$assetDir = dirname($requestedPath);
+			$requestedFile = basename($requestedPath);
+
+			$this->sendAsset($assetDir, $requestedFile);
+
+		} catch (\Exception $ex) {
+			throw $ex;
+		}
 	}
 
 

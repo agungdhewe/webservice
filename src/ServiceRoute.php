@@ -24,4 +24,15 @@ abstract class ServiceRoute {
 		$res = array_slice($parts, 0, 2);
 		return implode('\\', $res);
 	} 
+
+	public static function getBaseUrl() : string {
+		$headers = getallheaders(); 
+		if (array_key_exists('BASE_HREF', $headers)) {
+			return trim($headers['BASE_HREF'], '/');
+		} else if (!empty($baseUrl=Configuration::Get('BaseUrl'))) {
+			return $baseUrl;
+		} else {
+			return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
+		}
+	}
 }

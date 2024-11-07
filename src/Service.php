@@ -23,6 +23,7 @@ class Service {
 					throw new \Exception($errmsg, 500);
 				}
 
+				$param['urlreq'] = $urlreq;
 				$routehandler = Router::createHandle($urlreq);
 				$routehandler->route($param);
 				$routeComplete = true;
@@ -36,13 +37,13 @@ class Service {
 						'errorcode' => $ex->getCode(),
 						'httpheader' => 'HTTP/1.1 404 Not Found',
 					];
-					$urlreq = implode('/', [PageRoute::PREFIX, PageRoute::PAGE_NOTFOUND]);
+					$urlreq = implode('/', [PageRoute::PREFIX, WebPage::PAGE_NOTFOUND]);
 				} else {
 					$param = [
 						'errormessage' => $ex->getMessage(),
 						'errorcode' => $ex->getCode(),
 					];
-					$urlreq =  implode('/', [PageRoute::PREFIX, PageRoute::PAGE_ERROR]);
+					$urlreq =  implode('/', [PageRoute::PREFIX, WebPage::PAGE_ERROR]);
 				}
 			} 
 		}

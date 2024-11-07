@@ -11,19 +11,22 @@ class Router {
 
 
 	public static function GET(string $path, string $serviceRouteClassName) : void {
-		if (!array_key_exists($path, self::$GROUTES)) {
-			self::$GROUTES[$path] = [
-				"classname" => $serviceRouteClassName
-			];
+		if (array_key_exists($path, self::$GROUTES)) {
+			Log::warning("override GET route for existing path '$path");
 		}
+
+		self::$GROUTES[$path] = [
+			"classname" => $serviceRouteClassName
+		];
 	}
 
 	public static function POST(string $path, string $serviceRouteClassName) : void {
-		if (!array_key_exists($path, self::$PROUTES)) {
-			self::$PROUTES[$path] = [
-				"classname" => $serviceRouteClassName
-			];
+		if (array_key_exists($path, self::$PROUTES)) {
+			Log::warning("override POST route for existing path '$path");
 		}
+		self::$PROUTES[$path] = [
+			"classname" => $serviceRouteClassName
+		];
 	}
 
 
@@ -63,7 +66,7 @@ class Router {
 			if (!empty($indexpage)) {
 				$urlreq = $indexpage;
 			} else {
-				$urlreq = PageRoute::DEFAULT_PAGE;
+				$urlreq = WebPage::DEFAULT_PAGE;
 			}
 			
 		}

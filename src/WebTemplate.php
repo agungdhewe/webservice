@@ -86,25 +86,19 @@ abstract class WebTemplate {
 	}
 
 
-	protected function getBaseUrl() : string {
-		$headers = getallheaders(); 
-		if (array_key_exists('BASE_HREF', $headers)) {
-			return trim($headers['BASE_HREF'], '/');
-		} else if (!empty($baseUrl=Configuration::Get('BaseUrl'))) {
-			return $baseUrl;
-		} else {
-			return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
-		}
+	protected function getBaseHref() : string {
+		$baseurl = ServiceRoute::getBaseUrl();
+		return "$baseurl/";
 	}
 
 	protected function getUrl(string $path) : string {
-		$baseUrl = $this->getBaseUrl();
+		$baseUrl = ServiceRoute::getBaseUrl();
 		$$url = implode('/', [$baseUrl, $path]);
 		return $url;
 	}
 
-	protected function GetAssetUrl(string $path) : string {
-		$baseUrl = $this->getBaseUrl();
+	protected function GetTemplateAssetUrl(string $path) : string {
+		$baseUrl = ServiceRoute::getBaseUrl();
 		$assetUrl = implode('/', [$baseUrl, 'template', $path]);
 		return $assetUrl;
 	}
