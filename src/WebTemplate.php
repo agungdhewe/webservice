@@ -4,7 +4,7 @@ use AgungDhewe\PhpLogger\Log;
 
 
 
-abstract class WebTemplate {
+abstract class WebTemplate implements IWebTemplate {
 
 	private string $_title = "default page title";
 	private string $_mainContent;
@@ -14,6 +14,9 @@ abstract class WebTemplate {
 	abstract public function GetName() : string;
 	abstract public function GetTemplateDir() : string;
 	
+	public static function getTemplateObject(IWebTemplate $ifc) : IWebTemplate {
+		return $ifc;
+	}
 
 
 	public static function removeCommentBlocks(string $content) : string {
@@ -38,11 +41,11 @@ abstract class WebTemplate {
 		return $blocks;
 	}
 
-	protected function getMainContent() : string {
+	public function getMainContent() : string {
 		return $this->_mainContent;
 	}
 
-	protected function getBlockContent(string $blokname) : string {
+	public function getBlockContent(string $blokname) : string {
 		if (array_key_exists($blokname, $this->_blocks)) {
 			return $this->_blocks[$blokname];
 		} else {
@@ -75,7 +78,7 @@ abstract class WebTemplate {
 		$this->_title = $title;
 	}
 
-	protected function getTitle() : string {
+	public function getTitle() : string {
 		if (!empty($this->_title)) {
 			return $this->_title;
 		} else if (array_key_exists('title', $this->_blocks)) {
@@ -86,18 +89,18 @@ abstract class WebTemplate {
 	}
 
 
-	protected function getBaseHref() : string {
+	public function getBaseHref() : string {
 		$baseurl = ServiceRoute::getBaseUrl();
 		return "$baseurl/";
 	}
 
-	protected function getUrl(string $path) : string {
+	public function getUrl(string $path) : string {
 		$baseUrl = ServiceRoute::getBaseUrl();
 		$$url = implode('/', [$baseUrl, $path]);
 		return $url;
 	}
 
-	protected function GetTemplateAssetUrl(string $path) : string {
+	public function getTemplateAssetUrl(string $path) : string {
 		$baseUrl = ServiceRoute::getBaseUrl();
 		$assetUrl = implode('/', [$baseUrl, 'template', $path]);
 		return $assetUrl;

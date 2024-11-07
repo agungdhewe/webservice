@@ -4,7 +4,7 @@ abstract class ServiceRoute {
 	protected $urlreq;
 
 
-	public function __construct(string $urlreq) {
+	function __construct(string $urlreq) {
 		$this->urlreq = $urlreq;
 	}
 
