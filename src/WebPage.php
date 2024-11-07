@@ -39,7 +39,10 @@ abstract class WebPage {
 	}
 
 
-
+	protected function getContentFilePath(string $contentsDir, string $requestedContent) : string {
+		$pagefilepath = implode(DIRECTORY_SEPARATOR, [$contentsDir, $requestedContent . ".phtml"]);
+		return $pagefilepath;
+	}
 
 
 	protected function getPageFilePath(string $pagesDir, string $requestedPage) : string {
@@ -71,7 +74,12 @@ abstract class WebPage {
 	}
 
 
-	protected function render(string $pagefilepath, array $CONTENTPARAMS) {
+	protected function renderPageFile(string $pagefilepath, array $PARAMS) : void {
+		if (!is_array($PARAMS)) {
+			$PARAMS = [];
+		}
+		
+		
 		try {
 			if (!is_file($pagefilepath)) {
 				$errmsg = Log::error("File $pagefilepath is not found");
@@ -85,6 +93,18 @@ abstract class WebPage {
 			throw new \Exception($errmsg);
 		}
 	}
+
+
+	protected function renderContent(string $text) : void {
+		try {
+			echo $text;
+		} catch (\Exception $ex) {
+			$errmsg = Log::error($ex->getMessage());
+			throw new \Exception($errmsg);
+		}
+	}
+
+
 
 
 	protected function getPageAssetUrl(string $path) : string {

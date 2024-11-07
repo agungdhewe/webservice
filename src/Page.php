@@ -20,7 +20,7 @@ class Page extends WebPage {
 			// $this->setTitle("Default Halaman");
 
 			Log::info("rendering file $pagefilepath");
-			$this->render($pagefilepath, $params);
+			$this->renderPageFile($pagefilepath, $params);
 		} catch (\Exception $ex) {
 			Log::error($ex->getMessage());
 			throw $ex;

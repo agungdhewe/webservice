@@ -2,6 +2,10 @@
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\Webservice\Routes\PageRoute;
+use AgungDhewe\Webservice\Routes\TemplateRoute;
+use AgungDhewe\Webservice\Routes\AssetRoute;
+use AgungDhewe\Webservice\Routes\ContentRoute;
+use AgungDhewe\Webservice\Routes\ApiRoute;
 
 
 class Router {
@@ -31,10 +35,11 @@ class Router {
 
 
 	public static function setupDefaultRoutes() : void {
-		self::GET('template/*', 'AgungDhewe\Webservice\Routes\TemplateRoute');
-		self::GET('asset/*', 'AgungDhewe\Webservice\Routes\AssetRoute');
-		self::GET('page/*', 'AgungDhewe\Webservice\Routes\PageRoute');
-		self::POST('api/*', 'AgungDhewe\Webservice\Routes\ApiRoute');
+		self::GET('template/*', TemplateRoute::class);
+		self::GET('asset/*', AssetRoute::class);
+		self::GET('page/*', PageRoute::class);
+		self::GET('content/*', ContentRoute::class);		// Content
+		self::POST('api/*', ApiRoute::class);
 	}
 
 
@@ -82,7 +87,7 @@ class Router {
 		$routedata = self::getRouteData($urlreq, $routes);	
 		if ($routedata==null) {
 			if ($REQUEST_METHOD==='GET') {
-				$routedata = ['classname' => 'AgungDhewe\Webservice\Routes\PageRoute'];
+				$routedata = ['classname' => PageRoute::class];
 			} else {
 				$errmsg = Log::error("$REQUEST_METHOD request to '$urlreq' is not allowed");
 				throw new \Exception($errmsg, 405);

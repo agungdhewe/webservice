@@ -9,21 +9,32 @@ use AgungDhewe\Webservice\Database;
 use AgungDhewe\Webservice\PlainTemplate;
 use AgungDhewe\Webservice\WebTemplate;
 use AgungDhewe\Webservice\Page;
+use AgungDhewe\Webservice\Session;
+use AgungDhewe\Webservice\WebPage;
 
 class PageRoute extends ServiceRoute implements IRouteHandler {
 
 	const PREFIX = 'page';
 
-
-
 	private static array $_DATA = [];
 	private static object $_TPL;
-
+	
+	
+	private string $_requestedPrefix = self::PREFIX;
 
 
 	function __construct(string $urlreq) {
 		parent::__construct($urlreq); // contruct dulu parentnya
 	}
+
+	public function getRequestedPrefix() : string {
+		return $this->_requestedPrefix;
+	}
+
+	public function setRequestedPrefix(string $prefix) : void {
+		$this->_requestedPrefix = $prefix;
+	}
+
 
 	public function route(?array $param = []) : void {
 		Log::info("Route Page $this->urlreq");
@@ -37,8 +48,28 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		try {
 
 			Database::Connect();
+			Session::Start();
 			
-			$module = new Page();
+			if (array_key_exists('requestedPageClass', $param)) {
+				$requestedPageClass = $param['requestedPageClass'];
+			} else {
+				$requestedPageClass = 'AgungDhewe\\Webservice\\Page';
+			}
+
+			// cek apakah class ada
+			if (!class_exists($requestedPageClass)) {
+				$errmsg = Log::error("Class '$requestedPageClass' is not exists");
+				throw new \Exception($errmsg, 500);
+			}
+
+			// cek apakah subclass dari WebPage
+			if (!is_subclass_of($requestedPageClass, WebPage::class)) {
+				$errmsg = Log::error("Class '$requestedPageClass' not subclass of WebPage");
+				throw new \Exception($errmsg, 500);
+			}
+
+
+			$module = new $requestedPageClass();
 			$tpl = $module->getTemplate([]);
 
 			if (!WebTemplate::Validate($tpl)) {
@@ -55,7 +86,8 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				self::SetTemplate($tpl);
 				ob_start();
 
-				$requestedPage = ServiceRoute::getRequestedParameter('page/', $this->urlreq);
+				$requestedPrefix = $this->getRequestedPrefix();
+				$requestedPage = ServiceRoute::getRequestedParameter("$requestedPrefix/", $this->urlreq);
 				$module->LoadPage($requestedPage, $param);
 				$data = $module->getData();
 				self::SetData($data);
@@ -79,58 +111,16 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		}
 	}
 
-	// protected function getContent(string $pagesDir, string $requestedPage, array $CONTENTPARAMS) : string {
-	// 	$pagefile = implode(DIRECTORY_SEPARATOR, [$pagesDir, $requestedPage . ".phtml"]);
-	// 	if ($requestedPage === self::PAGE_NOTFOUND || $requestedPage === self::PAGE_ERROR) {
-	// 		if (!is_file($pagefile)) {
-	// 			$pagefile = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'pages', $requestedPage . ".phtml"]);
-	// 			$pagefile = realpath($pagefile);
-	// 		}
-	// 	}
-		
-		
-	// 	Log::info("load '$pagefile'");
-	// 	if (!is_file($pagefile)) {
-	// 		if ($requestedPage===self::PAGE_ERROR || $requestedPage===self::PAGE_NOTFOUND) {
-	// 			throw new \Exception("Internal Error Page '$requestedPage' not available", 500);
-	// 		} else {
-	// 			Log::error("Page '$requestedPage' not found");
-	// 			throw new \Exception("Page '$requestedPage' not found", 4040);
-	// 		}
-	// 	}
-
-	// 	// 
-	// 	try {
-	// 		ob_start();
-	// 		require_once $pagefile;
-	// 		$content = ob_get_contents();
-	// 		$success = true;
-	// 	} catch (\Exception $ex) {
-	// 		$content = $ex->getMessage();
-	// 	} finally {
-	// 		ob_end_clean();
-	// 		if (isset($success)) {
-	// 			return $content;
-	// 		} else {
-	// 			$filename =  basename($pagefile);
-	// 			Log::error("Error occured when rendering page file '$filename'");
-	// 			$content = fread($pagefile, filesize($pagefile));
-	// 			return $content;
-	// 		}
-	// 	}		
-	// }
-
-
 	public static function ResetDebugOnPageRequest(?array $patterns = ["page/*"]) : void {
 		if (getenv('DEBUG')) {
 			$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : null;
-			if (in_array($urlreq, ['page/error', 'page/notfound'])) {
+			if (in_array($urlreq, [Page::PAGE_ERROR, Page::PAGE_NOTFOUND])) {
 				return;
 			}
 
  			$defaultPage = Configuration::Get('IndexPage');
 			if (empty($defaultPage)) {
-				$defaultPage = self::DEFAULT_PAGE;
+				$defaultPage = Page::DEFAULT_PAGE;
 			}
 
 			if (empty($urlreq)) {
