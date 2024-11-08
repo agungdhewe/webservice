@@ -57,6 +57,10 @@ class Setup {
 
 
 			// changemod 
+			chmod(join(DIRECTORY_SEPARATOR, [$dir, "docker-up.sh"]), 0774);
+			chmod(join(DIRECTORY_SEPARATOR, [$dir, "docker-down.sh"]), 0774);
+			chmod(join(DIRECTORY_SEPARATOR, [$dir, "docker-cli.sh"]), 0774);
+
 			chmod(join(DIRECTORY_SEPARATOR, [$dir, "debug-monitor.sh"]), 0774);
 			chmod(join(DIRECTORY_SEPARATOR, [$dir, "testurl.sh"]), 0774);
 			chmod(join(DIRECTORY_SEPARATOR, [$dir, "log.txt"]), 0666);
@@ -126,6 +130,10 @@ class Setup {
 			['mold'=>'xdebug_ini.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dockerbuilddir, "docker-php-ext-xdebug.ini"])],
 			['mold'=>'container_yml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dockerbuilddir, $conf['containername']. ".yml"])],
 			['mold'=>'webserver_conf.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dockerbuilddir, "webserver.conf"])],
+
+			['mold'=>'docker_up.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "docker-up.sh"])],
+			['mold'=>'docker_down.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "docker-down.sh"])],
+			['mold'=>'docker_cli.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "docker-cli.sh"])],
 
 		];
 
