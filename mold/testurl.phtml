@@ -1,0 +1,10 @@
+<?="#!/bin/bash"?> 
+
+URL="http://localhost:<?=$DATA['port']?>"
+
+echo GET $URL
+curl -D - \
+	 $URL
+
+
+
