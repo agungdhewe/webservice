@@ -274,9 +274,6 @@ class Setup {
 			$jsondata['require'] = [];
 		} 
 		$require = $jsondata['require'];
-		$require['agungdhewe/phpsqlutil'] = "^1.2";
-		$require['agungdhewe/phplogger'] = "^1.1";
-		$require['agungdhewe/webservice'] = "@dev";
 		$jsondata['require'] = $require;
 
 
