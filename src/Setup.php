@@ -6,6 +6,7 @@ use tidy;
 
 class Setup {
 
+	const string MIN_PHP_VERSION = "8.3";
 
 	const string YES = 'Y';
 	const string NO = 'N';
@@ -20,11 +21,17 @@ class Setup {
 	static private string $LBL_OK = color::FG_BOLD_GREEN . "OK" . color::RESET;
 
 
-	public static function sini(string $dir) : void {
 
+
+
+	public static function sini(string $dir) : void { 
 		self::$MOLDDIR = join(DIRECTORY_SEPARATOR, [__DIR__, '..' , 'mold']);
-
 		try {
+
+			if (!self::valid_php_version()) {
+				throw new \Exception("Versi php minimal harus " . self::MIN_PHP_VERSION . "\n" . "Versi saat ini " . phpversion(), self::ERR_CRITICAL);
+			}
+
 			echo "*===================================*\n";
 			echo "* PHP AgungDhewe\Webservice Library *\n";
 			echo "*===================================*\n";
@@ -503,5 +510,18 @@ class Setup {
 			echo self::$LBL_OK;
 			echo "\n";
 		} 
+	}
+
+	private static function valid_php_version() : bool {
+		$versi_php_sekarang = phpversion();
+		// Membandingkan dengan versi minimal (misalnya, 8.3)
+		if (version_compare($versi_php_sekarang, self::MIN_PHP_VERSION, '<')) {
+			// echo "<br>Versi PHP Anda terlalu rendah. Minimal dibutuhkan PHP 8.3";
+			return false;
+		} else {
+			// echo "<br>Versi PHP Anda sudah memenuhi syarat (atau lebih tinggi)";
+			return true;
+		}
+
 	}
 }
