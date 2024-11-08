@@ -20,7 +20,7 @@ Configuration::Set([
 		// 'debugChannel' => 'fgta5-dev'
 	],
 
-	'WebTemplate' => new PlainTemplate(), 
+	'WebTemplate' => new PlainTemplate(join(DIRECTORY_SEPARATOR, [__DIR__, 'template'])), 
 	'PagesDir' => 'pages',
 	'BaseUrl' => 'http://localhost:<?=$DATA['port']?>',
 	'IndexPage' => 'page/home',

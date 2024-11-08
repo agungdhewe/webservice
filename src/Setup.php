@@ -55,6 +55,8 @@ class Setup {
 			self::CreateWorkspace($conf);
 			self::CreateIndex($conf);
 			self::CreatePlugins($conf);
+			self::CreateTemplate($conf); // TODO: lanjutkan untuk ini, belum dibuat per 241108
+			self::CreatePage($conf);     // TODO: lanjutkan untuk ini, belum dibuat per 241108
 
 			// copy default favicon
 			self::copyFavicon($conf);
