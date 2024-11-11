@@ -272,8 +272,10 @@ class Setup {
 		$assetdir = join(DIRECTORY_SEPARATOR, [$templatedir, 'assets']);
 		self::createDirectory($assetdir);
 
+
+		$containername = $DATA['containername'];
 		$subjects = [
-			['mold'=>'template_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$templatedir, "template.phtml"])],
+			['mold'=>'template_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$templatedir, $containername . ".phtml"])],
 			['mold'=>'template_style.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$assetdir, "style.css"])],
 		];
 
