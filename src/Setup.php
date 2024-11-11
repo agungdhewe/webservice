@@ -13,6 +13,7 @@ class Setup {
 
 	const int ERR_CANCEL = 9;
 	const int ERR_CRITICAL = 1;
+	const int ERR_GENERATED = 2;
 
 
 	static private string $MOLDDIR;
@@ -31,6 +32,12 @@ class Setup {
 			if (!self::valid_php_version()) {
 				throw new \Exception("Versi php minimal harus " . self::MIN_PHP_VERSION . "\n" . "Versi saat ini " . phpversion(), self::ERR_CRITICAL);
 			}
+
+			$generate_lock = join(DIRECTORY_SEPARATOR, [$dir, "generate.lock"]);
+			if (is_file($generate_lock)) {
+				throw new \Exception("Setup already done", self::ERR_GENERATED);
+			}
+
 
 			echo "*===================================*\n";
 			echo "* PHP AgungDhewe\Webservice Library *\n";
@@ -87,13 +94,24 @@ class Setup {
 			echo color::FG_BOLD_GREEN. "Generate Data Selesai." . color::RESET . "\n";
 			echo "jalankan " . color::FG_BOLD_YELLOW . "composer update" . color::RESET . " untuk memperbarui librari." . "\n";
 
+
+			// buat file generate.lock
+			$fp = fopen($generate_lock, "w");
+			fwrite($fp, "project generated at " . date('Y-m-d H:i:s') . "\n");
+			fclose($fp);
+
 		} catch (\Exception $ex) {
 			if ($ex->getCode()==self::ERR_CANCEL) {
 				echo "\n\n";
 				echo color::FG_BOLD_YELLOW . "Setup Canceled" . color::RESET;
 				echo "\n\n";
 				exit(0);
-			} 
+			} else if ($ex->getCode()==self::ERR_GENERATED) {
+				echo "\n\n";
+				echo color::FG_BOLD_YELLOW . "Setup Canceled is canceleed, because is already locked." . color::RESET;
+				echo "\n\n";
+				exit(0);
+			}
 
 			echo color::FG_BOLD_RED . "ERROR" . color::RESET;
 			echo "\n";
