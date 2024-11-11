@@ -1,28 +1,36 @@
-<!DOCTYPE html>
+<?="<?php"?> 
+	use AgungDhewe\Webservice\WebTemplate;
+	$tpl = WebTemplate::getTemplateObject($this);
+<?="?>"?><!DOCTYPE html>
 <html>
 	<head>
-		<title><?="<?=\$this->getTitle()?>"?></title>
+		<title><?="<?=\$tpl->getTitle()?>"?></title>
 		<link rel="icon" href="/favicon.ico">
-		<link rel="stylesheet" href="<?="<?=\$this->getTemplateAssetUrl('assets/style.css')?>"?>">
-		<?="<?=\$this->getBlockContent('header-metadata')?>"?> 
-		<?="<?=\$this->getBlockContent('header-style')?>"?> 
+		<link rel="stylesheet" href="<?="<?=\$tpl->getTemplateAssetUrl('assets/style.css')?>"?>">
+		<?="<?=\$tpl->getBlockContent('header-metadata')?>"?> 
+		<?="<?=\$tpl->getBlockContent('header-style')?>"?> 
 		<script>
 			var $ui = {};
 		</script>
-		<?="<?=\$this->getBlockContent('header-script')?>"?> 
+		<?="<?=\$tpl->getBlockContent('header-script')?>"?> 
 	</head>
 
 	<body>
+		<div class="logo">
+			<a href="<?="<?="?>$tpl->getUrl('')?>"> 
+			<img src="<?="<?"?>=$tpl->getTemplateAssetUrl('assets/logo.png')?>" alt="">
+			</a>
+		</div>
 		<header>
 			<h1>MyWeb Template</h1>
-			<nav></nav>
 		</header>
+		<nav></nav>
 		<main>
-			<?="<?=\$this->getMainContent()?>"?> 
+			<?="<?=\$tpl->getMainContent()?>"?> 
 		</main>
 		<footer>
 			<p>Copyright &copy; <?="<?=date('Y')?>"?>. All rights reserved.</p>
 		</footer>
 	</body>	
-	<?="<?=\$this->getBlockContent('footer-script')?>"?> 
+	<?="<?=\$tpl->getBlockContent('footer-script')?>"?> 
 </body>

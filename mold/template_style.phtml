@@ -1,14 +1,24 @@
 body {
 	margin: 0;
 	display: grid;
-	grid-template-rows: 100px auto 50px;
+	grid-template-columns: 120px auto;
+	grid-template-rows: 100px 23px auto 50px;
 	grid-template-areas: 
-		"header"
-		"maincontent"
-		"footer";
+		"logo header"
+		"nav nav"
+		"maincontent maincontent"
+		"footer footer";
 	min-height: 100vh;
 	background-color: white;
 	color: black;
+}
+
+
+.logo {
+	grid-area: logo;
+	background-color: rgb(124, 124, 124);
+	padding-left: 10px;
+	padding-top: 10px;
 }
 
 header {
@@ -17,6 +27,10 @@ header {
 	color: white;
 	padding-left: 30px;
 	padding-right: 30px;
+}
+
+nav {
+	grid-area: nav;
 }
 
 main {

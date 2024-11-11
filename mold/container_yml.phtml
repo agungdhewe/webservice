@@ -15,7 +15,11 @@ services:
     volumes:
       - ./docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./webserver.conf:/etc/apache2/sites-available/webserver.conf
-      - ./../:<?=$DATA['dir']?>:consistent
+<?php 
+	  if ($DATA['webservice_dev_mode']==true) {
+		  echo "      - ./../../../agungdhewe/webservice:/home/agung/Development/agungdhewe/webservice:consistent\n";
+	  }		  
+?>      - ./../:<?=$DATA['dir']?>:consistent
     working_dir: <?=$DATA['dir']?> 
 
 networks:

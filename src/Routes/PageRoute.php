@@ -6,11 +6,13 @@ use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\ServiceRoute;
 use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\Database;
-use AgungDhewe\Webservice\PlainTemplate;
+use AgungDhewe\Webservice\IWebPage;
+use AgungDhewe\Webservice\IWebTemplate;
 use AgungDhewe\Webservice\WebTemplate;
 use AgungDhewe\Webservice\Page;
 use AgungDhewe\Webservice\Session;
 use AgungDhewe\Webservice\WebPage;
+
 
 class PageRoute extends ServiceRoute implements IRouteHandler {
 
@@ -68,16 +70,29 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				throw new \Exception($errmsg, 500);
 			}
 
+			// cek apakah implementasi WebPage
+			if (!in_array(IWebPage::class, class_implements($requestedPageClass))) {
+				$errmsg = Log::error("Class '$requestedPageClass' not implements IWebPage");
+				throw new \Exception($errmsg, 500);
+			}
+
 
 			$module = new $requestedPageClass();
-			$tpl = $module->getTemplate([]);
+			$tpl = $module->getTemplate();
 
-			if (!WebTemplate::Validate($tpl)) {
+
+			// Validasi Template
+			if (!is_subclass_of($tpl, WebTemplate::class)) {
 				$tplclassname = get_class($tpl);
 				$errmsg = Log::error("Class '$tplclassname' not subclass of WebTemplate");
 				throw new \Exception($errmsg, 500);
 			}
 
+			if (!in_array(IWebTemplate::class, class_implements($tpl))) {
+				$tplclassname = get_class($tpl);
+				$errmsg = Log::error("Class '$tplclassname' not implements IWebTemplate");
+				throw new \Exception($errmsg, 500);
+			}
 
 			
 

@@ -3,7 +3,7 @@
 
 use AgungDhewe\PhpLogger\Log;
 
-class Page extends WebPage {
+class Page extends WebPage implements IWebPage {
 
 	public function LoadPage(string $requestedPage, array $params) : void {
 		try {

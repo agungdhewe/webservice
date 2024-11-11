@@ -24,7 +24,7 @@ class Setup {
 
 
 
-	public static function sini(string $dir) : void { 
+	public static function sini(string $dir, ?array $setupconfig) : void { 
 		self::$MOLDDIR = join(DIRECTORY_SEPARATOR, [__DIR__, '..' , 'mold']);
 		try {
 
@@ -35,15 +35,20 @@ class Setup {
 			echo "*===================================*\n";
 			echo "* PHP AgungDhewe\Webservice Library *\n";
 			echo "*===================================*\n";
-			// $conf = self::QuestAndConfigSetup($dir);
 
-			$conf = [
-				'dir' => $dir,
-				'docker' => true,
-				'containername' => 'myweb',
-				'containerport' => 86,
-				'networkname' => 'devnetwork'
-			];
+
+			if (!is_array($setupconfig)) {
+				$conf = self::QuestAndConfigSetup($dir);
+			} else {
+				$conf = [
+					'dir' => $dir,
+					'docker' => $setupconfig['docker'],
+					'containername' => $setupconfig['containername'],
+					'containerport' => $setupconfig['containerport'],
+					'networkname' => $setupconfig['networkname'],
+					'webservice_dev_mode' => $setupconfig['webservice_dev_mode'],
+				];
+			}
 
 			echo "\n";
 			self::CreateVSCodeDir($conf);
@@ -265,7 +270,7 @@ class Setup {
 		$DATA = self::getData($conf);
 
 		// buat direktory template
-		$templatedir = join(DIRECTORY_SEPARATOR, [$dir, 'template']);
+		$templatedir = join(DIRECTORY_SEPARATOR, [$dir, 'templates']);
 		self::createDirectory($templatedir);
 
 		// buat direktory template asset
@@ -284,7 +289,7 @@ class Setup {
 
 		// copy contoh image
 		$sourcefile = join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'templates', 'plaintemplate', 'assets', 'mywebservice.png']);
-		$targetfile = join(DIRECTORY_SEPARATOR, [$assetdir, 'mywebservice.png']);
+		$targetfile = join(DIRECTORY_SEPARATOR, [$assetdir, 'logo.png']);
 		copy($sourcefile, $targetfile);
 
 
@@ -304,6 +309,8 @@ class Setup {
 
 		$subjects = [
 			['mold'=>'home_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$pagesdir, "home.phtml"])],
+			['mold'=>'notfound_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$pagesdir, "notfound.phtml"])],
+			['mold'=>'error_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$pagesdir, "error.phtml"])],
 		];
 
 		self::generate($subjects, $DATA);
@@ -322,9 +329,15 @@ class Setup {
 
 
 		$subjects = [
-			['mold'=>'membuat_halaman_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$contentsdir, "membuat_halaman_.php"])],
-			['mold'=>'membuat_template_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$contentsdir, "membuat_template_.php"])],
+			['mold'=>'membuat_halaman_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$contentsdir, "membuat-halaman.phtml"])],
+			['mold'=>'membuat_template_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$contentsdir, "membuat-template.phtml"])],
 		];
+
+		// copy contoh image
+		$sourcefile = join(DIRECTORY_SEPARATOR, [__DIR__,  '..', 'mold', 'image.jpg']);
+		$targetfile = join(DIRECTORY_SEPARATOR, [$contentsdir, 'image.jpg']);
+		copy($sourcefile, $targetfile);
+
 
 		self::generate($subjects, $DATA);
 		echo "\n";
@@ -577,6 +590,15 @@ class Setup {
 		$DATA['containername'] = $conf['containername'];
 		$DATA['network'] = $conf['networkname'];
 		$DATA['dir'] = $conf['dir'];
+		$DATA['webservice_dev_mode'] = array_key_exists('webservice_dev_mode', $conf) ? $conf['webservice_dev_mode'] : false;
+
+		if ($DATA['webservice_dev_mode']==true) {
+			$DATA['webservice_version'] = "@dev";
+		} else {
+			$DATA['webservice_version'] = "^0.8";
+		}
+
+
 		return $DATA;
 	}
 

@@ -1,1 +1,39 @@
+{block name="title"}Membuat Template{/block}
 <h2>Membuat Template</h2>
+<p>
+Template halaman dapat anda buat pada direktori <b><?="<?="?>join(DIRECTORY_SEPARATOR, [dirname(__DIR__), "templates"])?></b><br>
+Untuk setup ini, halaman template yang digunakan adalah <b><?=$DATA['containername']?>.phtml</b>	
+</p>
+<p>
+Setiap halaman akan mempunyai interface dari <code>AgungDhewe\Webservice\IWebTemplate</code><br>
+dengan beberapa fungsi dasar yang bisa anda akses, sbb:<br>
+<ul>
+	<li>
+		<code>getUrl(string $path) : string</code><br>
+		mendapatkan string url untuk mengakses asset yang ada di direktori templates 
+	</li>
+	<li>
+		<code>getBaseHref() : string</code><br>
+		mendapatkan nama base url dari halman web yang bersangkutan 
+	</li>
+	<li>
+		<code>getBlockContent(string $blokname) : string</code><br>
+		mengakses isi block dari suatu halaman/content
+	</li>
+	<li>
+		<code>getMainContent() : string</code><br>
+		mengakses isi main content dari halaman
+	</li>
+	<li>
+		<code>getTemplateAssetUrl(string $path) : string</code><br>
+		mendapatkan string url untuk mengakses asset yang ada di direktori templates 
+	</li>
+	<li>
+		<code>getTitle() : string</code><br>
+		mendapatkan judul halaman (yang bisa diset dari block title)
+	</li>
+</ul>
+</p>
+
+
+

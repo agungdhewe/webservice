@@ -1,1 +1,98 @@
+{block name="title"}Membuat Halaman{/block}
 <h2>Membuat Halaman</h2>
+<p>
+Halaman standard dapat anda buat pada direktori <b><?="<?="?>join(DIRECTORY_SEPARATOR, [dirname(__DIR__), "pages"])?></b><br>	
+</p>
+<p>
+	Adapun sintak pemformatan untuk membuat halaman adalah seperti kita membuat halaman web dengan script PHP biasa atau HTML. 
+</p>
+<p>
+	Berikut ini adalah daftar block yang dapat digunakan untuk mengirim content data ke halaman template:
+	
+	<ul>
+		<li>
+			<code>&lcub;block name="title"&rcub;Judul Halaman&lcub;/block&rcub;</code>
+			<p>Tempatkan blok ini di bagian atas halaman, dan pada saat dirender, akan dimunculkan pada bagian title header halaman html.</p>
+		</li>
+
+		<li>
+			<code>
+			&lcub;block name="header-style"&rcub;<br>
+			tempatkan style anda disini<br>
+			&lcub;/block&rcub;</br>
+			</code>
+			<p>Block ini akan ditempatkan pada style header halaman</p>
+		</li>
+
+		<li>
+			<code>
+			&lcub;block name="header-script"&rcub;<br>
+			tempatkan script anda disini<br>
+			&lcub;/block&rcub;</br>
+			</code>
+			<p>Block ini akan ditempatkan pada script header halaman</p>
+		</li>
+
+		<li>
+			<code>
+			&lcub;block name="footer-script"&rcub;<br>
+			tempatkan script anda disini<br>
+			&lcub;/block&rcub;</br>
+			</code>
+			<p>Block ini akan ditempatkan pada script footer halaman</p>
+		</li>
+
+		<li>
+			<p>Anda juga bisa membuat custom block ada sendiri, untuk dipanggil pada halaman template</p>
+			<code>&lcub;block name="custom-name"&rcub;
+			Contoh Custom Block&lcub;/block&rcub;
+			</code> 
+		</li>
+
+	</ul>
+</p>
+
+<p>
+	Setiap halaman akan mempunyai interface dari <code>AgungDhewe\Webservice\IWebPage</code><br>
+	dengan beberapa fungsi dasar yang bisa anda akses, sbb:<br>
+	<ul>
+		<li>
+			<code>getTitle() : string</code><br>
+			mendapatkan judul halaman (yang bisa diset dari block title)
+		</li>
+		<li>
+			<code>getData() : array</code><br>
+			mengakses data yang bisa dikirim dari controller halaman
+		</li>
+		<li>
+			<code>getPageAssetUrl(string $path) : string</code><br>
+			mendapatkan string url untuk mengakses asset yang ada di direktori pages 
+		</li>
+		<li>
+			<code>getTemplate() : IWebTemplate</code><br>
+			mendapatkan interface dari object template yang digunakan
+		</li>
+	</ul>
+</p>
+
+
+<h3>Contoh mengakses asset halaman</h3> 
+<p>
+	Kita mempuyai file 'image.jpg' yang berada di direktori pages (<?="<?="?>join(DIRECTORY_SEPARATOR, [dirname(__DIR__), "pages"])?>).<br>
+	Untuk megakses file tersebut, kita buat dengan sintak berikut:
+</p>
+<p>
+	<code>
+		&lt;getPageAssetUrl("image.jpg")&gt;
+	</code>
+	<br>
+	perintah tersebut untuk mengakses file <b><?="<?="?>join(DIRECTORY_SEPARATOR, [__DIR__, 'image.jpg'])?></b><br>
+	yang akan menghasilkan string 
+	<a href="<?="<?=\$page->"?>getPageAssetUrl("image.jpg")?>">
+	<?="<?=\$page->"?>getPageAssetUrl("image.jpg")?>
+	</a>
+	
+	<br>
+	hasilnya adalah sbb:<br>
+	<img src="<?="<?=\$page->"?>getPageAssetUrl("image.jpg")?>" width="60" height="60">
+</p>

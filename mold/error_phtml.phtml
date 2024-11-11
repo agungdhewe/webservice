@@ -1,0 +1,11 @@
+{block name="title"}Error{/block}
+
+<?="<?php"?> 
+if (array_key_exists('errormessage', $PARAMS)) {
+	$errormessage = $PARAMS['errormessage'];
+} else {
+	$errormessage = "Page Error";
+}
+<?="?>"?> 
+
+<?="<?=\$errormessage ?>"?>

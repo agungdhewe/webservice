@@ -96,7 +96,7 @@ abstract class WebTemplate implements IWebTemplate {
 
 	public function getUrl(string $path) : string {
 		$baseUrl = ServiceRoute::getBaseUrl();
-		$$url = implode('/', [$baseUrl, $path]);
+		$url = implode('/', [$baseUrl, $path]);
 		return $url;
 	}
 
@@ -152,14 +152,6 @@ abstract class WebTemplate implements IWebTemplate {
 		}
 	}
 	
-
-	public static function Validate(object $tpl) : bool {
-		if (is_subclass_of($tpl, self::class)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 
 }

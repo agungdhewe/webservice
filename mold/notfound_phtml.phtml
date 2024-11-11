@@ -1,0 +1,12 @@
+{block name="title"}Not Found{/block}
+
+<?="<?php"?> 
+if (array_key_exists('errormessage', $PARAMS)) {
+	$errormessage = $PARAMS['errormessage'];
+} else {
+	$errormessage = "Page not found";
+}
+<?="?>"?> 
+
+<?="<?=\$errormessage ?>"?>
+

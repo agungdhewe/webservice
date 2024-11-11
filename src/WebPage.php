@@ -20,12 +20,33 @@ abstract class WebPage {
 		$this->_title = $text;
 	}
 
+	
+
+
+	public static function getPageObject($obj) : IWebPage  {
+		return $obj;
+	}
+
+
+
+	public function getPageAssetUrl(string $path) : string {
+		Log::info("get asset $path");
+
+		$rootDir = Configuration::getRootDir();
+		$currentpagedir = $this->getCurrentPageDir();
+		$pageAssetPath = str_replace($rootDir, '', $currentpagedir);
+		$pageAssetPath = trim($pageAssetPath, '/');
+		$baseurl = ServiceRoute::getBaseUrl();
+		$pageAssetUrl = implode('/', [$baseurl, 'asset', $pageAssetPath, $path]);
+
+		return $pageAssetUrl;
+	}
+
 	public function getTitle() : string {
 		return $this->_title;
 	}
 
-	public function GetTemplate(?array $param = []) : object {
-		// get template renderer
+	public function getTemplate() : IWebTemplate {
 		$tpl = Configuration::Get('WebTemplate');
 		if (empty($tpl)) {
 			$tpl = new PlainTemplate();
@@ -87,6 +108,9 @@ abstract class WebPage {
 			}
 			$this->setCurrentPageDir(dirname($pagefilepath));
 			
+			$tpl = $this->getTemplate();
+			$page = $this;
+
 			require_once $pagefilepath;
 		} catch (\Exception $ex) {
 			$errmsg = Log::error($ex->getMessage());
@@ -107,16 +131,5 @@ abstract class WebPage {
 
 
 
-	protected function getPageAssetUrl(string $path) : string {
-		Log::info("get asset $path");
 
-		$rootDir = Configuration::getRootDir();
-		$currentpagedir = $this->getCurrentPageDir();
-		$pageAssetPath = str_replace($rootDir, '', $currentpagedir);
-		$pageAssetPath = trim($pageAssetPath, '/');
-		$baseurl = ServiceRoute::getBaseUrl();
-		$pageAssetUrl = implode('/', [$baseurl, 'asset', $pageAssetPath, $path]);
-
-		return $pageAssetUrl;
-	}
 }

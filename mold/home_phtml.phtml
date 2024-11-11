@@ -1,1 +1,20 @@
-ini halaman home
+<?="<?php"?> 
+// get required page object
+use AgungDhewe\Webservice\WebPage;
+$page = WebPage::getPageObject($this);
+$tpl = $page->getTemplate();
+<?="?>"?> 
+
+ini halaman home anda.<br>
+edit halaman ini di direktori <b><?="<?=__DIR__?>"?></b>.<br>
+<br>
+Beberapa referensi yang dapat anda baca:<br>
+<ul>
+	<li><a href="<?="<?"?>=$tpl->getUrl("content/membuat-halaman")?>">Membuat Halaman</a></li>
+	<li><a href="<?="<?"?>=$tpl->getUrl("content/membuat-template")?>">Membuat Template</a></li> 
+</ul>
+<br>
+
+
+
+
