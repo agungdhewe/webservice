@@ -25,7 +25,7 @@ class Setup {
 
 
 
-	public static function sini(string $dir, ?array $setupconfig) : void { 
+	public static function sini(string $dir, ?array $setupconfig=null) : void { 
 		self::$MOLDDIR = join(DIRECTORY_SEPARATOR, [__DIR__, '..' , 'mold']);
 		try {
 
