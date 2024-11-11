@@ -1,0 +1,33 @@
+body {
+	margin: 0;
+	display: grid;
+	grid-template-rows: 100px auto 50px;
+	grid-template-areas: 
+		"header"
+		"maincontent"
+		"footer";
+	min-height: 100vh;
+	background-color: white;
+	color: black;
+}
+
+header {
+	grid-area: header;
+	background-color: rgb(124, 124, 124);
+	color: white;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+main {
+	grid-area: maincontent;
+	padding: 30px;
+}
+
+footer {
+	grid-area: footer;
+	background-color: black;
+	color: white;
+	padding-left: 30px;
+	padding-right: 30px;
+}

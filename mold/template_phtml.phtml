@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><?="<?=\$this->getTitle()?>"?></title>
+		<link rel="icon" href="/favicon.ico">
+		<link rel="stylesheet" href="<?="<?=\$this->getTemplateAssetUrl('assets/style.css')?>"?>">
+		<?="<?=\$this->getBlockContent('header-metadata')?>"?> 
+		<?="<?=\$this->getBlockContent('header-style')?>"?> 
+		<script>
+			var $ui = {};
+		</script>
+		<?="<?=\$this->getBlockContent('header-script')?>"?> 
+	</head>
+
+	<body>
+		<header>
+			<h1>MyWeb Template</h1>
+			<nav></nav>
+		</header>
+		<main>
+			<?="<?=\$this->getMainContent()?>"?> 
+		</main>
+		<footer>
+			<p>Copyright &copy; <?="<?=date('Y')?>"?>. All rights reserved.</p>
+		</footer>
+	</body>	
+	<?="<?=\$this->getBlockContent('footer-script')?>"?> 
+</body>

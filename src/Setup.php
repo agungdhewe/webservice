@@ -56,7 +56,8 @@ class Setup {
 			self::CreateIndex($conf);
 			self::CreatePlugins($conf);
 			self::CreateTemplate($conf); // TODO: lanjutkan untuk ini, belum dibuat per 241108
-			self::CreatePage($conf);     // TODO: lanjutkan untuk ini, belum dibuat per 241108
+			self::CreatePages($conf);     // TODO: lanjutkan untuk ini, belum dibuat per 241108
+			self::CreateContents($conf);     // TODO: lanjutkan untuk ini, belum dibuat per 241108
 
 			// copy default favicon
 			self::copyFavicon($conf);
@@ -254,6 +255,79 @@ class Setup {
 		self::generate($subjects, $DATA);
 		echo "\n";
 	}
+
+
+
+
+	private static function CreateTemplate(array $conf) : void {
+		echo "Generate Template ... \n";
+		$dir = $conf['dir'];
+		$DATA = self::getData($conf);
+
+		// buat direktory template
+		$templatedir = join(DIRECTORY_SEPARATOR, [$dir, 'template']);
+		self::createDirectory($templatedir);
+
+		// buat direktory template asset
+		$assetdir = join(DIRECTORY_SEPARATOR, [$templatedir, 'assets']);
+		self::createDirectory($assetdir);
+
+		$subjects = [
+			['mold'=>'template_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$templatedir, "template.phtml"])],
+			['mold'=>'template_style.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$assetdir, "style.css"])],
+		];
+
+		self::generate($subjects, $DATA);
+
+
+		// copy contoh image
+		$sourcefile = join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'templates', 'plaintemplate', 'assets', 'mywebservice.png']);
+		$targetfile = join(DIRECTORY_SEPARATOR, [$assetdir, 'mywebservice.png']);
+		copy($sourcefile, $targetfile);
+
+
+		echo "\n";
+	}
+
+
+	private static function CreatePages(array $conf) : void {
+		echo "Generate Index ... \n";
+		$dir = $conf['dir'];
+		$DATA = self::getData($conf);
+
+		// buat direktory pages
+		$pagesdir = join(DIRECTORY_SEPARATOR, [$dir, 'pages']);
+		self::createDirectory($pagesdir);
+
+
+		$subjects = [
+			['mold'=>'home_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$pagesdir, "home.phtml"])],
+		];
+
+		self::generate($subjects, $DATA);
+		echo "\n";
+	}
+
+
+	private static function CreateContents(array $conf) : void {
+		echo "Generate Index ... \n";
+		$dir = $conf['dir'];
+		$DATA = self::getData($conf);
+
+		// buat direktory pages
+		$contentsdir = join(DIRECTORY_SEPARATOR, [$dir, 'contents']);
+		self::createDirectory($contentsdir);
+
+
+		$subjects = [
+			['mold'=>'membuat_halaman_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$contentsdir, "membuat_halaman_.php"])],
+			['mold'=>'membuat_template_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$contentsdir, "membuat_template_.php"])],
+		];
+
+		self::generate($subjects, $DATA);
+		echo "\n";
+	}
+
 
 	private static function copyFavicon($conf) : void {
 		echo "set favicon ... \n";
