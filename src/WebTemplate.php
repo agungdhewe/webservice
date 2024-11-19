@@ -90,18 +90,18 @@ abstract class WebTemplate implements IWebTemplate {
 
 
 	public function getBaseHref() : string {
-		$baseurl = ServiceRoute::getBaseUrl();
+		$baseurl = Service::getBaseUrl();
 		return "$baseurl/";
 	}
 
 	public function getUrl(string $path) : string {
-		$baseUrl = ServiceRoute::getBaseUrl();
+		$baseUrl = Service::getBaseUrl();
 		$url = implode('/', [$baseUrl, $path]);
 		return $url;
 	}
 
 	public function getTemplateAssetUrl(string $path) : string {
-		$baseUrl = ServiceRoute::getBaseUrl();
+		$baseUrl = Service::getBaseUrl();
 		$assetUrl = implode('/', [$baseUrl, 'template', $path]);
 		return $assetUrl;
 	}

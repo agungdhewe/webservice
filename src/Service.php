@@ -77,4 +77,21 @@ class Service {
 		echo "<hr>";
 		echo "<small><a href=\"https://github.com/agungdhewe/webservice\">AgungDhewe PHP Webservice</a></small>\n";
 	}
+
+	public static function getBaseUrl() : string {
+		$headers = getallheaders(); 
+		if (array_key_exists('BASE_HREF', $headers)) {
+			return trim($headers['BASE_HREF'], '/');
+		} else if (!empty($baseUrl=Configuration::Get('BaseUrl'))) {
+			return $baseUrl;
+		} else {
+			return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
+		}
+	}
+
+	public static function getDomainName() : string {
+		$baseurl = self::getBaseUrl();
+		$host = parse_url($baseurl, PHP_URL_HOST);
+		return $host;
+	}
 }

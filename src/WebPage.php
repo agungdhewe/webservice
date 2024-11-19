@@ -12,6 +12,8 @@ abstract class WebPage {
 	private string $_title = '';
 	private string $_currentpagedir;
 
+	protected array $_pageData = [];
+
 
 	abstract public function LoadPage(string $requestedPage, array $params) : void;
 
@@ -23,7 +25,7 @@ abstract class WebPage {
 	
 
 
-	public static function getPageObject($obj) : IWebPage  {
+	public static function getWebPageObject($obj) : IWebPage  {
 		return $obj;
 	}
 
@@ -36,7 +38,7 @@ abstract class WebPage {
 		$currentpagedir = $this->getCurrentPageDir();
 		$pageAssetPath = str_replace($rootDir, '', $currentpagedir);
 		$pageAssetPath = trim($pageAssetPath, '/');
-		$baseurl = ServiceRoute::getBaseUrl();
+		$baseurl = Service::getBaseUrl();
 		$pageAssetUrl = implode('/', [$baseurl, 'asset', $pageAssetPath, $path]);
 
 		return $pageAssetUrl;
@@ -55,8 +57,26 @@ abstract class WebPage {
 		return $tpl;
 	}
 
-	public function getData() : array {
-		return [];
+	public function getPageData() : array {
+		return $this->_pageData;
+	}
+
+
+	public function setPageData(array $data) : void {
+		$this->_pageData = $data;
+	}
+
+	public function setData(string $key, mixed $value) : void {
+		$this->_pageData[$key] = $value;
+	}
+
+
+	public function getData(string $key) : mixed {
+		if (!array_key_exists($key, $this->_pageData)) {
+			return null;
+		} else {
+			return $this->_pageData[$key];
+		}
 	}
 
 

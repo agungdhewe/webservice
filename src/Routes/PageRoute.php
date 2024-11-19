@@ -1,4 +1,6 @@
-<?php namespace AgungDhewe\Webservice\Routes;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice\Routes;
+
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\PhpLogger\Logger;
@@ -18,6 +20,7 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 	const PREFIX = 'page';
 
+	private static array $_PAGEHANDLERS = [];
 	private static array $_DATA = [];
 	private static object $_TPL;
 	
@@ -38,6 +41,8 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 	}
 
 
+
+
 	public function route(?array $param = []) : void {
 		Log::info("Route Page $this->urlreq");
 
@@ -51,8 +56,11 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 			Database::Connect();
 			Session::Start();
+
 			
-			if (array_key_exists('requestedPageClass', $param)) {
+			if (array_key_exists($this->urlreq, self::$_PAGEHANDLERS)) {
+				$requestedPageClass = self::$_PAGEHANDLERS[$this->urlreq];
+			} else if (array_key_exists('requestedPageClass', $param)) {
 				$requestedPageClass = $param['requestedPageClass'];
 			} else {
 				$requestedPageClass = 'AgungDhewe\\Webservice\\Page';
@@ -104,8 +112,8 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				$requestedPrefix = $this->getRequestedPrefix();
 				$requestedPage = ServiceRoute::getRequestedParameter("$requestedPrefix/", $this->urlreq);
 				$module->LoadPage($requestedPage, $param);
-				$data = $module->getData();
-				self::SetData($data);
+				$data = $module->getPageData();
+				self::SetPageData($data);
 
 				$title = $module->getTitle();
 				$tpl->setTitle($title);
@@ -153,6 +161,9 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		}	
 	}
 
+	public static function addPageHandler(string $handlername, string $handlerclassname) : void {
+		self::$_PAGEHANDLERS[$handlername] = $handlerclassname;
+	}
 
 	protected static function SetTemplate(object $tpl) : void {
 		self::$_TPL = $tpl;
@@ -162,11 +173,11 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 		return self::$_TPL;
 	}
 
-	protected static function SetData(array $data) : void {
+	protected static function SetPageData(array $data) : void {
 		self::$_DATA = $data;
 	}
 
-	public static function GetData() : array {
+	public static function GetPageData() : array {
 		return self::$_DATA;
 	}
 
