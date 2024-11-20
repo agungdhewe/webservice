@@ -1,10 +1,11 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\PhpLogger\Logger;
 use AgungDhewe\PhpLogger\LoggerOutput;
 
-class Configuration
+final class Configuration
 {
 	const string SPARATOR = ".";
 	const string DB_MAIN = "DbMain";	

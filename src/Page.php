@@ -1,4 +1,5 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 
 use AgungDhewe\PhpLogger\Log;
@@ -26,6 +27,9 @@ class Page extends WebPage implements IWebPage {
 			throw $ex;
 		}
 	}
+
+
+	
 
 
 }

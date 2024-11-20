@@ -194,14 +194,8 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 
 	private function getPageHandler(string $urlreq) : ?string {
-		// if (array_key_exists($urlreq, self::$_PAGEHANDLERS)) {
-		// 	return self::$_PAGEHANDLERS[$urlreq];
-		// } else {
-		// 	return null;
-		// }
-
 		foreach (self::$_PAGEHANDLERS as $pattern => $handlerclassname) {
-			if ($urlreq === $pattern) {
+		if ($urlreq === $pattern) {
 				return $handlerclassname;
 			}
 			if (str_contains($pattern, '*')) {

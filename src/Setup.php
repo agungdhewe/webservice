@@ -1,10 +1,11 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 use AgungDhewe\Cli\color;
 use AgungDhewe\Cli\shell;
 use tidy;
 
-class Setup {
+final class Setup {
 
 	const string MIN_PHP_VERSION = "8.3";
 

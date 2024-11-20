@@ -1,4 +1,5 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 
 use AgungDhewe\PhpLogger\Log;
@@ -22,10 +23,13 @@ abstract class WebPage {
 		$this->_title = $text;
 	}
 
-	
-
 
 	public static function getWebPageObject($obj) : IWebPage  {
+		if (!in_array(IWebPage::class, class_implements($obj))) {
+			$classname = get_class($obj);
+			$errmsg = Log::error("Class '$classname' not implements IWebPage");
+			throw new \Exception($errmsg, 500);
+		}
 		return $obj;
 	}
 

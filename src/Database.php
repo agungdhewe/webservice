@@ -1,8 +1,9 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
 
-class Database {
+final class Database {
 
 	public static bool $_database_connected = false;
 

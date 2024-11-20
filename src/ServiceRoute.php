@@ -1,4 +1,5 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 abstract class ServiceRoute {
 	protected $urlreq;

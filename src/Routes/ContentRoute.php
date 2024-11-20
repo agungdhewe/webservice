@@ -1,4 +1,5 @@
-<?php namespace AgungDhewe\Webservice\Routes;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice\Routes;
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\Webservice\IRouteHandler;

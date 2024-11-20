@@ -1,4 +1,5 @@
-<?php namespace AgungDhewe\Webservice;
+<?php declare(strict_types=1);
+namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\Webservice\Routes\PageRoute;
@@ -8,7 +9,7 @@ use AgungDhewe\Webservice\Routes\ContentRoute;
 use AgungDhewe\Webservice\Routes\ApiRoute;
 
 
-class Router {
+final class Router {
 
 	private static $GROUTES = [];
 	private static $PROUTES = [];

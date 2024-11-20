@@ -4,11 +4,12 @@ namespace AgungDhewe\Webservice;
 use AgungDhewe\PhpLogger\Log;
 
 
-class Session {
+final class Session {
 
 	const string SESSION_NAME = 'sessid';
 
 	private static bool $_session_started = false;
+	private static User $_user;
 
 	public static function Start() : void {
 		
@@ -47,6 +48,19 @@ class Session {
 
 	public static function Id() : string {
 		return session_id();
+	}
+
+
+	public static function GetUser() : ?User {
+		if (isset(self::$_user)) {
+			return self::$_user;
+		} else {
+			return null;
+		}
+	}
+
+	public static function SetUser(User $user) : void {
+		self::$_user = $user;
 	}
 
 }
