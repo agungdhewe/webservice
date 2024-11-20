@@ -58,13 +58,24 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 			Session::Start();
 
 			
-			if (array_key_exists($this->urlreq, self::$_PAGEHANDLERS)) {
-				$requestedPageClass = self::$_PAGEHANDLERS[$this->urlreq];
-			} else if (array_key_exists('requestedPageClass', $param)) {
+			// cek dulu, apakah ada requestedPageClass,
+			// kalau tidak ada, cek apakah ada di _PAGEHANDLERS
+			// kalau masih tidak ada gunakan default AgungDhewe\Webservice\Page
+			if (array_key_exists('requestedPageClass', $param)) {
 				$requestedPageClass = $param['requestedPageClass'];
+			} else if ($classHandler = $this->getPageHandler($this->urlreq)) {
+				$requestedPageClass = $classHandler;
 			} else {
 				$requestedPageClass = 'AgungDhewe\\Webservice\\Page';
 			}
+		
+			// if (array_key_exists($this->urlreq, self::$_PAGEHANDLERS)) {
+			// 	$requestedPageClass = self::$_PAGEHANDLERS[$this->urlreq];
+			// } else if (array_key_exists('requestedPageClass', $param)) {
+			// 	$requestedPageClass = $param['requestedPageClass'];
+			// } else {
+			// 	$requestedPageClass = 'AgungDhewe\\Webservice\\Page';
+			// }
 
 			// cek apakah class ada
 			if (!class_exists($requestedPageClass)) {
@@ -179,6 +190,29 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 	public static function GetPageData() : array {
 		return self::$_DATA;
+	}
+
+
+	private function getPageHandler(string $urlreq) : ?string {
+		// if (array_key_exists($urlreq, self::$_PAGEHANDLERS)) {
+		// 	return self::$_PAGEHANDLERS[$urlreq];
+		// } else {
+		// 	return null;
+		// }
+
+		foreach (self::$_PAGEHANDLERS as $pattern => $handlerclassname) {
+			if ($urlreq === $pattern) {
+				return $handlerclassname;
+			}
+			if (str_contains($pattern, '*')) {
+				$regexPattern = str_replace('*', '.*', $pattern);
+				$regexPattern = str_replace('/', '\/', $regexPattern); // Escape slashes
+				if (preg_match("/^$regexPattern$/", $urlreq, $matches)) {
+					return $handlerclassname;
+				}
+			}
+		}
+		return null;
 	}
 
 }

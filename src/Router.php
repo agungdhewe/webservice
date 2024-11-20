@@ -63,7 +63,7 @@ class Router {
 	}
 
 
-	public static function createHandle(?string $urlreq) : IRouteHandler {	
+	public static function createHandle(?string &$urlreq) : IRouteHandler {	
 		$REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 		
 		if ($urlreq==null) {
@@ -87,6 +87,7 @@ class Router {
 		$routedata = self::getRouteData($urlreq, $routes);	
 		if ($routedata==null) {
 			if ($REQUEST_METHOD==='GET') {
+				$urlreq = join('/', [PageRoute::PREFIX, $urlreq]);
 				$routedata = ['classname' => PageRoute::class];
 			} else {
 				$errmsg = Log::error("$REQUEST_METHOD request to '$urlreq' is not allowed");

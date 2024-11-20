@@ -23,8 +23,10 @@ class Service {
 					throw new \Exception($errmsg, 500);
 				}
 
-				$param['urlreq'] = $urlreq;
+				
 				$routehandler = Router::createHandle($urlreq);
+				
+				$param['urlreq'] = $urlreq;
 				$routehandler->route($param);
 				$routeComplete = true;
 			} catch (\Exception $ex) {
