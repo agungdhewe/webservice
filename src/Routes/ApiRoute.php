@@ -6,6 +6,9 @@ use AgungDhewe\Webservice\IRouteHandler;
 use AgungDhewe\Webservice\Service;
 use AgungDhewe\Webservice\ServiceRoute;
 use AgungDhewe\Webservice\WebApi;
+use AgungDhewe\Webservice\Database;
+use AgungDhewe\Webservice\Session;
+
 
 class ApiRoute extends ServiceRoute implements IRouteHandler {
 	function __construct(string $urlreq) {
@@ -19,6 +22,9 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 		ob_start();
 
 		try {
+
+			Database::Connect();
+			
 
 			$urlreq = $this->urlreq;
 			$classPath = null;
@@ -60,12 +66,20 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 
 			// data yang dikirim melalui POST
 			$jsonData = file_get_contents('php://input');
-			$receiveParameters = json_decode($jsonData, true);
+			$request = json_decode($jsonData, true);
+			
 			if (json_last_error() !== JSON_ERROR_NONE) {
 				$errmsg = Log::error("Invalid request data: " . json_last_error_msg());
 				throw new \Exception($errmsg, 400);
 			}
 
+			if (!array_key_exists('request', $request)) {
+				Log::error("'request' key data is not exist is not available in posted json");
+				throw new \Exception("Invalid request parameter", 400);
+			}
+			$receiveParameters = $request['request'];
+
+			
 			// cek apakah argument yang dikirim sesuai
 			$executeParameters = [];
 			$methodInfo = self::GetMethodInfo($classPath, $functionName);
@@ -98,8 +112,17 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 
 			// eksekusi method
 			$webApi = new $classPath();
+			if ($webApi->isNeedSession($functionName) || $webApi->isNeedAuthenticatedUser($functionName)) {
+				if (!Session::IsStarted()) {
+					Session::Start(); // start session jika diperlukan
+				}
+			}
+			$webApi->setCurrentApi($webApi);
 			$webApi->webApiVerify($functionName);
 			$ret = $webApi->$functionName(...array_values($executeParameters));
+			if ($ret==null) {
+				$ret = new \stdClass;
+			}
 
 
 			$output = ob_get_contents();
