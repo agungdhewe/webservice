@@ -5,6 +5,11 @@ use AgungDhewe\PhpLogger\Log;
 use AgungDhewe\PhpLogger\Logger;
 use AgungDhewe\PhpLogger\LoggerOutput;
 
+define('DAYS', 86400);
+define('HOURS', 3600);
+define('MINUTES', 60);
+
+
 final class Configuration
 {
 	const string SPARATOR = ".";
@@ -22,8 +27,11 @@ final class Configuration
 	private static array $_usedConfig;
 	private static string $_rootDir;
 
-	public static function Set(array $config) : void {
+	public static function Setup(array $config) : void {
 		self::$_config = $config;
+	}
+
+	public static function Set(string $keypath, mixed $value) : void {
 	}
 
 	public static function Get(?string $keypath = null) : mixed {

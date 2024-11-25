@@ -3,7 +3,7 @@
 use AgungDhewe\Webservice\Configuration;
 use AgungDhewe\Webservice\PlainTemplate;
 
-Configuration::Set([
+Configuration::Setup([
 	
 	'DbMain' => [
 		'DSN' => "mysql:host=127.0.0.1;dbname=mydb",
