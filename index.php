@@ -29,7 +29,7 @@ try {
 	}
 
 	require_once $configpath;
-	Configuration::setRootDir(__DIR__);
+	Configuration::SetRootDir(__DIR__);
 	Configuration::setLogger();
 
 	// Prepare debug

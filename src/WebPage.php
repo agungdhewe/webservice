@@ -38,7 +38,7 @@ abstract class WebPage {
 	public function getPageAssetUrl(string $path) : string {
 		Log::info("get asset $path");
 
-		$rootDir = Configuration::getRootDir();
+		$rootDir = Configuration::GetRootDir();
 		$currentpagedir = $this->getCurrentPageDir();
 		$pageAssetPath = str_replace($rootDir, '', $currentpagedir);
 		$pageAssetPath = trim($pageAssetPath, '/');

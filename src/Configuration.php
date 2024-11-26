@@ -25,9 +25,9 @@ final class Configuration extends Config
 	];
 
 
-	public static function setLogger() : void {
+	public static function SetLogger() : void {
 		$logfilename = Configuration::Get("Logger.filename");
-		$logfilepath = implode(DIRECTORY_SEPARATOR, [Configuration::getRootDir(), $logfilename]);
+		$logfilepath = implode(DIRECTORY_SEPARATOR, [Configuration::GetRootDir(), $logfilename]);
 		$maxLogSize = Configuration::Get("Logger.maxLogSize");
 		$output = Configuration::Get("Logger.output");
 		$debugmode = Configuration::Get("Logger.debug");
@@ -37,7 +37,7 @@ final class Configuration extends Config
 		// rotate_log_file, apabila log file telah melebihi ukuran yang ditentukan
 		$logSize = filesize($logfilepath);
 		if ($logSize > $maxLogSize) {
-			$logsArchieveDir = implode(DIRECTORY_SEPARATOR, [Configuration::getRootDir(), "logs"]);
+			$logsArchieveDir = implode(DIRECTORY_SEPARATOR, [Configuration::GetRootDir(), "logs"]);
 			if (!is_dir($logsArchieveDir)) {
 				mkdir($logsArchieveDir);
 			}

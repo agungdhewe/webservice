@@ -14,7 +14,7 @@ class Page extends WebPage implements IWebPage {
 				throw new \Exception($errmsg, 500);
 			}
 
-			$rootDir = Configuration::getRootDir();
+			$rootDir = Configuration::GetRootDir();
 			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
 			$pagefilepath = $this->getPageFilePath($pagesDir, $requestedPage);
 

@@ -19,7 +19,7 @@ class ContentPage extends WebPage implements IWebPage {
 				$contentDir = "contents";
 			}
 
-			$rootDir = Configuration::getRootDir();
+			$rootDir = Configuration::GetRootDir();
 			$contentDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $contentDir]);
 			$contentfilepath = $this->getContentFilePath($contentDir, $requestedContent);
 			if (is_file($contentfilepath)) {

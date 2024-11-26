@@ -29,7 +29,7 @@ class AssetRoute extends ServiceRoute implements IRouteHandler {
 
 		try {
 
-			$rootDir = Configuration::getRootDir();
+			$rootDir = Configuration::GetRootDir();
 			$requestedAsset = ServiceRoute::getRequestedParameter('asset/', $this->urlreq);
 			$requestedPath = implode(DIRECTORY_SEPARATOR, [$rootDir, $requestedAsset]);
 
