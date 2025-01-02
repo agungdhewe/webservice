@@ -134,6 +134,7 @@ abstract class WebPage {
 			
 			$tpl = $this->getTemplate();
 			$page = $this;
+			$CONTENTPARAMS = $PARAMS; 
 
 			require_once $pagefilepath;
 		} catch (\Exception $ex) {
