@@ -136,7 +136,7 @@ final class Session {
 
 	public static function SetSessionHandlerBy(int $handlermodel) : void {
 		if (self::$_session_handler_by!=self::HANDLER_FILE) {
-			$errmsg = Log::error('session handler mode ' . self::HANDLER_FILE . ' is not implemented yet.');
+			$errmsg = Log::Error('session handler mode ' . self::HANDLER_FILE . ' is not implemented yet.');
 			throw new \Exception($errmsg, 500);
 		}
 		self::$_session_handler_by = $handlermodel;
@@ -161,7 +161,7 @@ final class Session {
 	}
 
 	private static function IsExistInDb(string $sessid) : ?bool {
-		$errmsg = Log::error('session handler in DB is not implemented');
+		$errmsg = Log::Error('session handler in DB is not implemented');
 		throw new \Exception($errmsg, 500);
 	}
 }

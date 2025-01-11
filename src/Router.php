@@ -17,7 +17,7 @@ final class Router {
 
 	public static function GET(string $path, string $serviceRouteClassName) : void {
 		if (array_key_exists($path, self::$GROUTES)) {
-			Log::warning("override GET route for existing path '$path");
+			Log::Warning("override GET route for existing path '$path");
 		}
 
 		self::$GROUTES[$path] = [
@@ -27,7 +27,7 @@ final class Router {
 
 	public static function POST(string $path, string $serviceRouteClassName) : void {
 		if (array_key_exists($path, self::$PROUTES)) {
-			Log::warning("override POST route for existing path '$path");
+			Log::Warning("override POST route for existing path '$path");
 		}
 		self::$PROUTES[$path] = [
 			"classname" => $serviceRouteClassName
@@ -35,7 +35,7 @@ final class Router {
 	}
 
 
-	public static function setupDefaultRoutes() : void {
+	public static function SetupDefaultRoutes() : void {
 		self::GET('template/*', TemplateRoute::class);
 		self::GET('asset/*', AssetRoute::class);
 		self::GET('page/*', PageRoute::class);
@@ -44,7 +44,7 @@ final class Router {
 	}
 
 
-	public static function getRouteData(?string $url, array $routers): ?array {
+	public static function GetRouteData(?string $url, array $routers): ?array {
 		foreach ($routers as $pattern => $routedata) {
 			// Check for exact match
 			if ($url === $pattern) {
@@ -64,7 +64,7 @@ final class Router {
 	}
 
 
-	public static function createHandle(?string &$urlreq) : IRouteHandler {	
+	public static function CreateHandle(?string &$urlreq) : IRouteHandler {	
 		$REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 		
 		if ($urlreq==null) {
@@ -78,10 +78,10 @@ final class Router {
 		}
 
 		if ($REQUEST_METHOD==='GET') {
-			Log::info("parse url GET '$urlreq'");
+			Log::Info("parse url GET '$urlreq'");
 			$routes = self::$GROUTES;			
 		} else {
-			Log::info("parse url $REQUEST_METHOD '$urlreq'");
+			Log::Info("parse url $REQUEST_METHOD '$urlreq'");
 			$routes = self::$PROUTES;
 		}
 	
@@ -91,26 +91,26 @@ final class Router {
 				$urlreq = join('/', [PageRoute::PREFIX, $urlreq]);
 				$routedata = ['classname' => PageRoute::class];
 			} else {
-				$errmsg = Log::error("$REQUEST_METHOD request to '$urlreq' is not allowed");
+				$errmsg = Log::Error("$REQUEST_METHOD request to '$urlreq' is not allowed");
 				throw new \Exception($errmsg, 405);
 			}
 		}
 
 		$classname = $routedata['classname'];
 		if (!class_exists($classname)) {
-			$errmsg = Log::error("Class '$classname' not found");
+			$errmsg = Log::Error("Class '$classname' not found");
 			throw new \Exception($errmsg, 500);
 		}
 		
 		// check if class implements IRouteHandler
 		if (!in_array(IRouteHandler::class, class_implements($classname))) {
-			$errmsg = Log::error("Class '$classname' not implements IRouteHandler");
+			$errmsg = Log::Error("Class '$classname' not implements IRouteHandler");
 			throw new \Exception($errmsg, 500);
 		}
 
 		// check if class is subclass of ServiceRoute
 		if (!is_subclass_of($classname, ServiceRoute::class)) {
-			$errmsg = Log::error("Class '$classname' not subclass of ServiceRoute");
+			$errmsg = Log::Error("Class '$classname' not subclass of ServiceRoute");
 			throw new \Exception($errmsg, 500);
 		}
 

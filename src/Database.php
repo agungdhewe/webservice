@@ -11,15 +11,15 @@ final class Database {
 	public static function Connect() : void {
 		try {
 			if (!self::$_database_connected) {
-				Log::info("Connecting to database...");
+				Log::Info("Connecting to database...");
 
 
 
 				self::$_database_connected = true;
-				Log::info("Database Connected.");
+				Log::Info("Database Connected.");
 			}
 		} catch (\Exception $ex) {
-			Log::error($ex->getMessage());
+			Log::Error($ex->getMessage());
 			throw new \Exception($ex->getMessage(), 500);
 		}
 	}

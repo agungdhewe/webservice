@@ -12,18 +12,18 @@ class TemplateRoute extends AssetRoute implements IRouteHandler {
 	}
 
 	public function route(?array $param = []) : void {
-		Log::info("Route Template $this->urlreq");
+		Log::Info("Route Template $this->urlreq");
 
 		try {
 
 			// get current template renderer
 			$tpl = Configuration::Get('WebTemplate');
 			if (empty($tpl)) {
-				$errmsg = Log::error("WebTemplate in Configuration is empty or not defined");
+				$errmsg = Log::Error("WebTemplate in Configuration is empty or not defined");
 				throw new \Exception($errmsg, 500);
 			}
 
-			$requestedAsset = ServiceRoute::getRequestedParameter('template/', $this->urlreq);
+			$requestedAsset = ServiceRoute::GetRequestedParameter('template/', $this->urlreq);
 			$templatedir = $tpl->GetTemplateDir();
 			
 			$this->sendAsset($templatedir, $requestedAsset);

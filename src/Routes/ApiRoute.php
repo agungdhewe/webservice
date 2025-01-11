@@ -16,7 +16,7 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 	}
 
 	public function route(?array $param = []) : void {
-		Log::info("Route Page $this->urlreq");
+		Log::Info("Route Page $this->urlreq");
 
 
 		ob_start();
@@ -46,19 +46,19 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 
 			// cek apakah class ada
 			if (!class_exists($classPath)) {
-				Log::error("Class $classPath not found");
+				Log::Error("Class $classPath not found");
 				throw new \Exception("Invalid endpoint $urlreq", 404);
 			}
 
 			// cek apakah class inherit dari WebApi
 			if (!is_subclass_of($classPath, WebApi::class)) {
-				Log::error("Class $classPath not inherit from WebApi");
+				Log::Error("Class $classPath not inherit from WebApi");
 				throw new \Exception("Invalid endpoint $urlreq", 500);
 			}
 
 			// cek apakah method ada
 			if (!method_exists($classPath, $functionName)) {
-				Log::error("Method $functionName not found in class $classPath");
+				Log::Error("Method $functionName not found in class $classPath");
 				throw new \Exception("Invalid endpoint $urlreq", 404);
 			}
 
@@ -74,7 +74,7 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 			}
 
 			if (!array_key_exists('request', $request)) {
-				Log::error("'request' key data is not exist is not available in posted json");
+				Log::Error("'request' key data is not exist is not available in posted json");
 				throw new \Exception("Invalid request parameter", 400);
 			}
 			$receiveParameters = $request['request'];
@@ -85,7 +85,7 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 			$methodInfo = self::GetMethodInfo($classPath, $functionName);
 
 			if (!$methodInfo['isApiMethod']) {
-				Log::error("Method $functionName is not API method in class $classPath");
+				Log::Error("Method $functionName is not API method in class $classPath");
 				throw new \Exception("Invalid endpoint $urlreq", 405);
 			}
 
@@ -95,7 +95,7 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 				$type = $mp['type'];
 
 				if (!array_key_exists($name, $receiveParameters)) {
-					Log::error("Missing parameter '$name'");
+					Log::Error("Missing parameter '$name'");
 					throw new \Exception("Missing one or more parameter(s) in request", 400);
 				}
 
@@ -103,7 +103,7 @@ class ApiRoute extends ServiceRoute implements IRouteHandler {
 				$recvValue = $receiveParameters[$name];
 				// $recvType = gettype($recvValue);
 				if (!self::IsTypeMatch($type, $recvValue)) {
-					Log::error("Invalid type for parameter '$name'. Expected '$type'");
+					Log::Error("Invalid type for parameter '$name'. Expected '$type'");
 					throw new \Exception("Invalid one or more parameter(s) in rerquest", 400);
 				}
 

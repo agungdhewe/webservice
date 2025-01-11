@@ -18,7 +18,7 @@ class ContentRoute extends PageRoute implements IRouteHandler {
 	}
 
 	public function route(?array $param = []) : void {
-		Log::info("Route Content $this->urlreq");
+		Log::Info("Route Content $this->urlreq");
 
 		try {
 			Database::Connect();

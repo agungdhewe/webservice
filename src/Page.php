@@ -6,11 +6,11 @@ use AgungDhewe\PhpLogger\Log;
 
 class Page extends WebPage implements IWebPage {
 
-	public function LoadPage(string $requestedPage, array $params) : void {
+	public function loadPage(string $requestedPage, array $params) : void {
 		try {
 			$pagesDir = Configuration::Get('PagesDir'); 
 			if (empty($pagesDir)) {
-				$errmsg = Log::error("PagesDir in Configuration is empty or not defined");
+				$errmsg = Log::Error("PagesDir in Configuration is empty or not defined");
 				throw new \Exception($errmsg, 500);
 			}
 
@@ -20,10 +20,10 @@ class Page extends WebPage implements IWebPage {
 
 			// $this->setTitle("Default Halaman");
 
-			Log::info("rendering file $pagefilepath");
+			Log::Info("rendering file $pagefilepath");
 			$this->renderPageFile($pagefilepath, $params);
 		} catch (\Exception $ex) {
-			Log::error($ex->getMessage());
+			Log::Error($ex->getMessage());
 			throw $ex;
 		}
 	}

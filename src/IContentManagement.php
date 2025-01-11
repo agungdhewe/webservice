@@ -1,5 +1,5 @@
 <?php namespace AgungDhewe\Webservice;
 
 interface IContentManagement {
-	public static function getContent(string $requestedContent) : Content; 
+	public static function GetContent(string $requestedContent) : Content; 
 }

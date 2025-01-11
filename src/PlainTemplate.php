@@ -14,6 +14,11 @@ class PlainTemplate extends WebTemplate {
 
 	}
 
+	public static function GetObject(object $tpl) : PlainTemplate {
+		return $tpl;
+	}
+
+
 	public function GetName() : string {
 		if ($this->curr_templatename!=null) {
 			return $this->curr_templatename;
@@ -22,7 +27,7 @@ class PlainTemplate extends WebTemplate {
 		}
 	}
 
-	public function GetTemplateDir() : string {
+	public function getTemplateDir() : string {
 		$name = $this->GetName();
 		if ($this->curr_tpldir==null) {
 			$templatedir = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'templates', $name]);

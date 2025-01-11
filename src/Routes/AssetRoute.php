@@ -25,7 +25,7 @@ class AssetRoute extends ServiceRoute implements IRouteHandler {
 	}
 
 	public function route(?array $param = []) : void {
-		Log::info("Route Asset $this->urlreq");
+		Log::Info("Route Asset $this->urlreq");
 
 		try {
 
@@ -50,13 +50,13 @@ class AssetRoute extends ServiceRoute implements IRouteHandler {
 		try {
 			$contenttype = $this->getContentType($requestedFile);
 			if (empty($contenttype)) {
-				$errmsg = log::error("Asset request of '$requestedFile' is not allowed");
+				$errmsg = log::Error("Asset request of '$requestedFile' is not allowed");
 				throw new \Exception($errmsg, 403);
 			}
 			header("Content-Type: $contenttype");
 
 			if (!is_file($assetpath)) {
-				$errmsg = log::error("Asset '$assetpath' is not found");
+				$errmsg = log::Error("Asset '$assetpath' is not found");
 				throw new \Exception($errmsg, 404);
 			}
 			header("Content-Length: ".filesize($assetpath));

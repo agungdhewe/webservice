@@ -23,14 +23,11 @@ final class Setup {
 	static private string $LBL_OK = color::FG_BOLD_GREEN . "OK" . color::RESET;
 
 
-
-
-
-	public static function sini(string $dir, ?array $setupconfig=null) : void { 
+	public static function Sini(string $dir, ?array $setupconfig=null) : void { 
 		self::$MOLDDIR = join(DIRECTORY_SEPARATOR, [__DIR__, '..' , 'mold']);
 		try {
 
-			if (!self::valid_php_version()) {
+			if (!self::IsValidPhpVersion()) {
 				throw new \Exception("Versi php minimal harus " . self::MIN_PHP_VERSION . "\n" . "Versi saat ini " . phpversion(), self::ERR_CRITICAL);
 			}
 
@@ -73,10 +70,10 @@ final class Setup {
 			self::CreateContents($conf);     // TODO: lanjutkan untuk ini, belum dibuat per 241108
 
 			// copy default favicon
-			self::copyFavicon($conf);
+			self::CopyFavicon($conf);
 
 			// update composer
-			self::updateComposer($conf);
+			self::UpdateComposer($conf);
 
 
 			// changemod 
@@ -130,16 +127,16 @@ final class Setup {
 		echo "Generate .vscode ... \n";
 
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		// buat direktory .vscode
 		$vscodedir = join(DIRECTORY_SEPARATOR, [$dir, '.vscode']);
-		self::createDirectory($vscodedir);
+		self::CreateDirectory($vscodedir);
 		$subjects = [
 			['mold'=>'vscode_launch_json.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$vscodedir, "launch.json"])],
 		];
 		
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	}
 
@@ -155,11 +152,11 @@ final class Setup {
 		echo "Generate Docker Builder ... \n";
 
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		// buat direktory dockerbuild
 		$dockerbuilddir = join(DIRECTORY_SEPARATOR, [$dir, 'dockerbuild']);
-		self::createDirectory($dockerbuilddir);
+		self::CreateDirectory($dockerbuilddir);
 		$subjects = [
 			['mold'=>'xdebug_ini.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dockerbuilddir, "docker-php-ext-xdebug.ini"])],
 			['mold'=>'container_yml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dockerbuilddir, $conf['containername']. ".yml"])],
@@ -171,7 +168,7 @@ final class Setup {
 
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	}
 
@@ -184,7 +181,7 @@ final class Setup {
 			['mold'=>'gitignore.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, ".gitignore"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 		
 
@@ -193,13 +190,13 @@ final class Setup {
 	private static function CreateHtaccess(array $conf) : void {
 		echo "Generate htaccess ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		$subjects = [
 			['mold'=>'htaccess.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, ".htaccess"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	
 	}
@@ -207,14 +204,14 @@ final class Setup {
 	private static function CreateConfig(array $conf) : void {
 		echo "Generate Config ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		$subjects = [
 			['mold'=>'config_php.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "config.php"])],
 			['mold'=>'config_php.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "config-development.php"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	}
 
@@ -225,7 +222,7 @@ final class Setup {
 	private static function CreateDebuger(array $conf) : void {
 		echo "Generate Debugger ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		$subjects = [
 			['mold'=>'testurl.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "testurl.sh"])],
@@ -234,7 +231,7 @@ final class Setup {
 			['mold'=>'blank.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "log.txt"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 
 	}
@@ -244,11 +241,11 @@ final class Setup {
 		echo "Generate Plugin directory ... \n";
 
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		// buat direktory dockerbuild
 		$pluginsdir = join(DIRECTORY_SEPARATOR, [$dir, 'plugins']);
-		self::createDirectory($pluginsdir);
+		self::CreateDirectory($pluginsdir);
 
 		echo "\n";
 	}
@@ -256,13 +253,13 @@ final class Setup {
 	private static function CreateWorkspace(array $conf) : void {
 		echo "Generate VSCode Workspace ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		$subjects = [
 			['mold'=>'workspace.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, $conf['containername']. ".code-workspace"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 
 	}
@@ -270,13 +267,13 @@ final class Setup {
 	private static function CreateIndex(array $conf) : void {
 		echo "Generate Index ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		$subjects = [
 			['mold'=>'index.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$dir, "index.php"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	}
 
@@ -286,15 +283,15 @@ final class Setup {
 	private static function CreateTemplate(array $conf) : void {
 		echo "Generate Template ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		// buat direktory template
 		$templatedir = join(DIRECTORY_SEPARATOR, [$dir, 'templates']);
-		self::createDirectory($templatedir);
+		self::CreateDirectory($templatedir);
 
 		// buat direktory template asset
 		$assetdir = join(DIRECTORY_SEPARATOR, [$templatedir, 'assets']);
-		self::createDirectory($assetdir);
+		self::CreateDirectory($assetdir);
 
 
 		$containername = $DATA['containername'];
@@ -303,7 +300,7 @@ final class Setup {
 			['mold'=>'template_style.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$assetdir, "style.css"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 
 
 		// copy contoh image
@@ -319,11 +316,11 @@ final class Setup {
 	private static function CreatePages(array $conf) : void {
 		echo "Generate Index ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		// buat direktory pages
 		$pagesdir = join(DIRECTORY_SEPARATOR, [$dir, 'pages']);
-		self::createDirectory($pagesdir);
+		self::CreateDirectory($pagesdir);
 
 
 		$subjects = [
@@ -332,7 +329,7 @@ final class Setup {
 			['mold'=>'error_phtml.phtml', 'target'=>join(DIRECTORY_SEPARATOR, [$pagesdir, "error.phtml"])],
 		];
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	}
 
@@ -340,11 +337,11 @@ final class Setup {
 	private static function CreateContents(array $conf) : void {
 		echo "Generate Index ... \n";
 		$dir = $conf['dir'];
-		$DATA = self::getData($conf);
+		$DATA = self::GetData($conf);
 
 		// buat direktory pages
 		$contentsdir = join(DIRECTORY_SEPARATOR, [$dir, 'contents']);
-		self::createDirectory($contentsdir);
+		self::CreateDirectory($contentsdir);
 
 
 		$subjects = [
@@ -358,12 +355,12 @@ final class Setup {
 		copy($sourcefile, $targetfile);
 
 
-		self::generate($subjects, $DATA);
+		self::Generate($subjects, $DATA);
 		echo "\n";
 	}
 
 
-	private static function copyFavicon($conf) : void {
+	private static function CopyFavicon($conf) : void {
 		echo "set favicon ... \n";
 		$dir = $conf['dir'];
 
@@ -381,7 +378,7 @@ final class Setup {
 		echo "\n";
 	}
 
-	private static function updateComposer(array $conf) : void {
+	private static function UpdateComposer(array $conf) : void {
 		echo "Update Composer ... \n";
 		$dir = $conf['dir'];
 
@@ -535,7 +532,7 @@ final class Setup {
 	} 
 
 
-	private static function getDebugPort(array $conf) : int {
+	private static function GetDebugPort(array $conf) : int {
 		$debugport = 9003;
 		if ($conf['docker']) {
 			$port =  $conf['containerport'];
@@ -549,7 +546,7 @@ final class Setup {
 	}
 
 
-	public static function generate(array $subjects, array $DATA) : void {
+	public static function Generate(array $subjects, array $DATA) : void {
 		foreach ($subjects as $subject) {
 			$moldfilename = $subject['mold'];
 			$targetfilepath = $subject['target'];
@@ -566,7 +563,7 @@ final class Setup {
 	}
 
 
-	public static function produce(string $moldfilepath, string $targetfilepath, array $data) : void {
+	public static function Produce(string $moldfilepath, string $targetfilepath, array $data) : void {
 		$DATA = $data; // $DATA akan digunakan di $moldfilepath
 		if (!is_file($moldfilepath)) {
 			$moldfilename = basename($moldfilepath);
@@ -584,7 +581,7 @@ final class Setup {
 		fclose($fp);
 	}
 
-	public static function confirmOverwriteIfExists(string $filepath) : bool {
+	public static function ConfirmOverwriteIfExists(string $filepath) : bool {
 		if (is_file($filepath)) {
 			// file sudah ada, tanya apakah akan di overide
 			$filename = basename($filepath);
@@ -602,7 +599,7 @@ final class Setup {
 	}
 
 
-	public static function getData(array $conf) : array {
+	public static function GetData(array $conf) : array {
 		$DATA = [];
 		$DATA['port']= $conf['containerport']; 
 		$DATA['debugport'] = self::getDebugPort($conf);
@@ -621,7 +618,7 @@ final class Setup {
 		return $DATA;
 	}
 
-	private static function createDirectory(string $dirpath) : void {
+	private static function CreateDirectory(string $dirpath) : void {
 		$dirname = basename($dirpath);
 		if (!is_dir($dirpath)) {
 			echo "creating $dirname  ... ";
@@ -631,7 +628,7 @@ final class Setup {
 		} 
 	}
 
-	private static function valid_php_version() : bool {
+	private static function IsValidPhpVersion() : bool {
 		$versi_php_sekarang = phpversion();
 		// Membandingkan dengan versi minimal (misalnya, 8.3)
 		if (version_compare($versi_php_sekarang, self::MIN_PHP_VERSION, '<')) {

@@ -24,10 +24,10 @@ abstract class WebPage {
 	}
 
 
-	public static function getWebPageObject($obj) : IWebPage  {
+	public static function GetWebPageObject($obj) : IWebPage  {
 		if (!in_array(IWebPage::class, class_implements($obj))) {
 			$classname = get_class($obj);
-			$errmsg = Log::error("Class '$classname' not implements IWebPage");
+			$errmsg = Log::Error("Class '$classname' not implements IWebPage");
 			throw new \Exception($errmsg, 500);
 		}
 		return $obj;
@@ -36,13 +36,13 @@ abstract class WebPage {
 
 
 	public function getPageAssetUrl(string $path) : string {
-		Log::info("get asset $path");
+		Log::Info("get asset $path");
 
 		$rootDir = Configuration::GetRootDir();
 		$currentpagedir = $this->getCurrentPageDir();
 		$pageAssetPath = str_replace($rootDir, '', $currentpagedir);
 		$pageAssetPath = trim($pageAssetPath, '/');
-		$baseurl = Service::getBaseUrl();
+		$baseurl = Service::GetBaseUrl();
 		$pageAssetUrl = implode('/', [$baseurl, 'asset', $pageAssetPath, $path]);
 
 		return $pageAssetUrl;
@@ -56,7 +56,7 @@ abstract class WebPage {
 		$tpl = Configuration::Get('WebTemplate');
 		if (empty($tpl)) {
 			$tpl = new PlainTemplate();
-			Log::warning("WebTemplate in Configuration is empty or not defined, using standard PlainTemplate.");
+			Log::Warning("WebTemplate in Configuration is empty or not defined, using standard PlainTemplate.");
 		}
 		return $tpl;
 	}
@@ -127,7 +127,7 @@ abstract class WebPage {
 		
 		try {
 			if (!is_file($pagefilepath)) {
-				$errmsg = Log::error("File $pagefilepath is not found");
+				$errmsg = Log::Error("File $pagefilepath is not found");
 				throw new \Exception($errmsg);
 			}
 			$this->setCurrentPageDir(dirname($pagefilepath));
@@ -138,7 +138,7 @@ abstract class WebPage {
 
 			require_once $pagefilepath;
 		} catch (\Exception $ex) {
-			$errmsg = Log::error($ex->getMessage());
+			$errmsg = Log::Error($ex->getMessage());
 			throw new \Exception($errmsg);
 		}
 	}
@@ -148,7 +148,7 @@ abstract class WebPage {
 		try {
 			echo $text;
 		} catch (\Exception $ex) {
-			$errmsg = Log::error($ex->getMessage());
+			$errmsg = Log::Error($ex->getMessage());
 			throw new \Exception($errmsg);
 		}
 	}

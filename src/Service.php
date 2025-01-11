@@ -18,7 +18,7 @@ final class Service {
 		'500' => ['500', 'Internal Error'],
 	];
 
-	public static function main() {
+	public static function Main() {
 		$urlreq = array_key_exists('urlreq', $_GET) ? trim($_GET['urlreq'], '/') : null;
 		$param = [];
 
@@ -29,7 +29,7 @@ final class Service {
 			$iter++;
 			try {
 				if ($iter > self::MAX_ITER) {
-					$errmsg = Log::error("Maximum iteration reached");
+					$errmsg = Log::Error("Maximum iteration reached");
 					throw new \Exception($errmsg, 500);
 				}
 
@@ -64,7 +64,7 @@ final class Service {
 		
 	}
 
-	public static function handleHttpException(\Exception $ex) {
+	public static function HandleHttpException(\Exception $ex) {
 		$errCode = (string)$ex->getCode();
 		if (array_key_exists($errCode, self::HTTP_ERROR_LIST)) {
 			$err = self::HTTP_ERROR_LIST[$errCode];
@@ -82,7 +82,7 @@ final class Service {
 		echo "<small><a href=\"https://github.com/agungdhewe/webservice\">AgungDhewe PHP Webservice</a></small>\n";
 	}
 
-	public static function getBaseUrl() : string {
+	public static function GetBaseUrl() : string {
 		$headers = getallheaders(); 
 		if (array_key_exists('BASE_HREF', $headers)) {
 			return trim($headers['BASE_HREF'], '/');
@@ -93,7 +93,7 @@ final class Service {
 		}
 	}
 
-	public static function getDomainName() : string {
+	public static function GetDomainName() : string {
 		$baseurl = self::getBaseUrl();
 		$host = parse_url($baseurl, PHP_URL_HOST);
 		return $host;

@@ -79,19 +79,19 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 			// cek apakah class ada
 			if (!class_exists($requestedPageClass)) {
-				$errmsg = Log::error("Class '$requestedPageClass' is not exists");
+				$errmsg = Log::Error("Class '$requestedPageClass' is not exists");
 				throw new \Exception($errmsg, 500);
 			}
 
 			// cek apakah subclass dari WebPage
 			if (!is_subclass_of($requestedPageClass, WebPage::class)) {
-				$errmsg = Log::error("Class '$requestedPageClass' not subclass of WebPage");
+				$errmsg = Log::Error("Class '$requestedPageClass' not subclass of WebPage");
 				throw new \Exception($errmsg, 500);
 			}
 
 			// cek apakah implementasi WebPage
 			if (!in_array(IWebPage::class, class_implements($requestedPageClass))) {
-				$errmsg = Log::error("Class '$requestedPageClass' not implements IWebPage");
+				$errmsg = Log::Error("Class '$requestedPageClass' not implements IWebPage");
 				throw new \Exception($errmsg, 500);
 			}
 
@@ -103,13 +103,13 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 			// Validasi Template
 			if (!is_subclass_of($tpl, WebTemplate::class)) {
 				$tplclassname = get_class($tpl);
-				$errmsg = Log::error("Class '$tplclassname' not subclass of WebTemplate");
+				$errmsg = Log::Error("Class '$tplclassname' not subclass of WebTemplate");
 				throw new \Exception($errmsg, 500);
 			}
 
 			if (!in_array(IWebTemplate::class, class_implements($tpl))) {
 				$tplclassname = get_class($tpl);
-				$errmsg = Log::error("Class '$tplclassname' not implements IWebTemplate");
+				$errmsg = Log::Error("Class '$tplclassname' not implements IWebTemplate");
 				throw new \Exception($errmsg, 500);
 			}
 
@@ -121,8 +121,8 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				ob_start();
 
 				$requestedPrefix = $this->getRequestedPrefix();
-				$requestedPage = ServiceRoute::getRequestedParameter("$requestedPrefix/", $this->urlreq);
-				$module->LoadPage($requestedPage, $param);
+				$requestedPage = ServiceRoute::GetRequestedParameter("$requestedPrefix/", $this->urlreq);
+				$module->loadPage($requestedPage, $param);
 				$data = $module->getPageData();
 				self::SetPageData($data);
 
@@ -131,14 +131,14 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 
 				$content = ob_get_contents();
 			} catch (\Exception $ex) {
-				$errmsg = Log::error($ex->getMessage());
+				$errmsg = Log::Error($ex->getMessage());
 				throw new \Exception($errmsg, $ex->getCode());
 			} finally {
 				ob_end_clean();
 			}
 	
 			// $content = $this->getContent($pagesDir, $requestedPage, $param);			
-			$tpl->Render($content);
+			$tpl->render($content);
 		
 		} catch (\Exception $ex) {
 			throw $ex;
@@ -165,14 +165,14 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				$regexPattern = str_replace('*', '.*', $pattern);
 				$regexPattern = str_replace('/', '\/', $regexPattern); // Escape slashes
 				if (preg_match("/^$regexPattern$/", $urlreq, $matches)) {
-					Logger::clearDebug();
+					Logger::ClearDebug();
 					break;
 				}
 			}
 		}	
 	}
 
-	public static function addPageHandler(string $handlername, string $handlerclassname) : void {
+	public static function AddPageHandler(string $handlername, string $handlerclassname) : void {
 		self::$_PAGEHANDLERS[$handlername] = $handlerclassname;
 	}
 

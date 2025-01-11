@@ -58,7 +58,7 @@ final class Configuration extends Config
 				// jika debug channel ditemukan, cek apakah channel sesuai dengan header webservice-debug-channel
 				$headers = getallheaders();
 				if (array_key_exists(self::DEBUG_CHANNEL_NAME, $headers)) {
-					Log::info(self::DEBUG_CHANNEL_NAME . ": ".$headers[self::DEBUG_CHANNEL_NAME]);
+					Log::Info(self::DEBUG_CHANNEL_NAME . ": ".$headers[self::DEBUG_CHANNEL_NAME]);
 					if ($headers[self::DEBUG_CHANNEL_NAME] == $debug_channel) {
 						$set_debug_mode = true;
 					}
