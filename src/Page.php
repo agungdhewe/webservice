@@ -12,7 +12,7 @@ class Page extends WebPage  {
 
 	public function loadPage(string $requestedPage, array $params) : void {
 		try {
-			parent::loadPage($requestedPage, $params);
+			$this->renderPage($requestedPage, $params);
 		} catch (\Exception $ex) {
 			Log::Error($ex->getMessage());
 			throw $ex;

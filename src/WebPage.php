@@ -17,35 +17,7 @@ abstract class WebPage {
 
 
 	abstract static function GetObject(object $obj) ;
-
-	//abstract public function loadPage(string $requestedPage, array $params) : void;
-	public function loadPage(string $requestedPage, array $params) : void {
-		try {
-			$pagesDir = Configuration::Get('PagesDir'); 
-			if (empty($pagesDir)) {
-				$errmsg = Log::Error("PagesDir in Configuration is empty or not defined");
-				throw new \Exception($errmsg, 500);
-			}
-
-			$rootDir = Configuration::GetRootDir();
-			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
-			$pagefilepath = $this->getPageFilePath($pagesDir, $requestedPage);
-
-			// $this->setTitle("Default Halaman");
-
-			Log::Info("rendering file $pagefilepath");
-			$this->renderPageFile($pagefilepath, $params);
-		} catch (\Exception $ex) {
-			Log::Error($ex->getMessage());
-			throw $ex;
-		}
-	}
-
-	protected function setTitle(string $text) : void {
-		$this->_title = $text;
-	}
-
-
+	abstract function loadPage(string $requestedPage, array $params) : void;
 
 
 
@@ -60,6 +32,11 @@ abstract class WebPage {
 		$pageAssetUrl = implode('/', [$baseurl, 'asset', $pageAssetPath, $path]);
 
 		return $pageAssetUrl;
+	}
+
+
+	protected function setTitle(string $text) : void {
+		$this->_title = $text;
 	}
 
 	public function getTitle() : string {
@@ -133,27 +110,42 @@ abstract class WebPage {
 	}
 
 
+
+	protected function renderPage(string $requestedPage, array $PARAMS) : void {
+		try {
+			$pagesDir = Configuration::Get('PagesDir'); 
+			if (empty($pagesDir)) {
+				$errmsg = Log::Error("PagesDir in Configuration is empty or not defined");
+				throw new \Exception($errmsg, 500);
+			}
+
+			$rootDir = Configuration::GetRootDir();
+			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
+			$pagefilepath = $this->getPageFilePath($pagesDir, $requestedPage);
+
+			$this->renderPageFile($pagefilepath, $PARAMS);
+		} catch (\Exception $ex) {
+			Log::Error($ex->getMessage());
+			throw $ex;
+		}
+	}
+
 	protected function renderPageFile(string $pagefilepath, array $PARAMS) : void {
 		if (!is_array($PARAMS)) {
 			$PARAMS = [];
 		}
-		
-		
+
 		try {
+			Log::Info("rendering file $pagefilepath");
 			if (!is_file($pagefilepath)) {
 				$errmsg = Log::Error("File $pagefilepath is not found");
 				throw new \Exception($errmsg);
 			}
 			$this->setCurrentPageDir(dirname($pagefilepath));
-			
-			// $tpl = $this->getTemplate();
-			// $page = $this;
-			// $CONTENTPARAMS = $PARAMS; 
-
 			require_once $pagefilepath;
 		} catch (\Exception $ex) {
-			$errmsg = Log::Error($ex->getMessage());
-			throw new \Exception($errmsg);
+			Log::Error($ex->getMessage());
+			throw $ex;
 		}
 	}
 
