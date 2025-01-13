@@ -89,11 +89,11 @@ class PageRoute extends ServiceRoute implements IRouteHandler {
 				throw new \Exception($errmsg, 500);
 			}
 
-			// cek apakah implementasi WebPage
-			if (!in_array(IWebPage::class, class_implements($requestedPageClass))) {
-				$errmsg = Log::Error("Class '$requestedPageClass' not implements IWebPage");
-				throw new \Exception($errmsg, 500);
-			}
+			// // cek apakah implementasi WebPage
+			// if (!in_array(IWebPage::class, class_implements($requestedPageClass))) {
+			// 	$errmsg = Log::Error("Class '$requestedPageClass' not implements IWebPage");
+			// 	throw new \Exception($errmsg, 500);
+			// }
 
 
 			$module = new $requestedPageClass();

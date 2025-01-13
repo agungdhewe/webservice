@@ -3,13 +3,16 @@ namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
 
-class ContentPage extends WebPage implements IWebPage {
+class ContentPage extends WebPage  {
 	protected static IContentManagement $cms;
 
 	public static function SetContentManagement(IContentManagement $cms) : void {
 		self::$cms = $cms;
 	}
 
+	public static function GetObject(object $obj) : ContentPage {
+		return $obj;
+	}
 
 	public function loadPage(string $requestedContent, array $params): void {
 		try {

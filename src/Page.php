@@ -4,24 +4,15 @@ namespace AgungDhewe\Webservice;
 
 use AgungDhewe\PhpLogger\Log;
 
-class Page extends WebPage implements IWebPage {
+class Page extends WebPage  {
+
+	public static function GetObject(object $obj) : Page {
+		return $obj;
+	}
 
 	public function loadPage(string $requestedPage, array $params) : void {
 		try {
-			$pagesDir = Configuration::Get('PagesDir'); 
-			if (empty($pagesDir)) {
-				$errmsg = Log::Error("PagesDir in Configuration is empty or not defined");
-				throw new \Exception($errmsg, 500);
-			}
-
-			$rootDir = Configuration::GetRootDir();
-			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
-			$pagefilepath = $this->getPageFilePath($pagesDir, $requestedPage);
-
-			// $this->setTitle("Default Halaman");
-
-			Log::Info("rendering file $pagefilepath");
-			$this->renderPageFile($pagefilepath, $params);
+			parent::loadPage($requestedPage, $params);
 		} catch (\Exception $ex) {
 			Log::Error($ex->getMessage());
 			throw $ex;

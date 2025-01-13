@@ -2,7 +2,7 @@
 namespace AgungDhewe\Webservice;
 
 
-class PlainTemplate extends WebTemplate {
+class PlainTemplate extends WebTemplate implements IWebTemplate {
 	const string DEFAULT_NAME = "plaintemplate";
 
 	private ?string $curr_tpldir;

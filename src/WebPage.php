@@ -16,22 +16,36 @@ abstract class WebPage {
 	protected array $_pageData = [];
 
 
-	abstract public function LoadPage(string $requestedPage, array $params) : void;
+	abstract static function GetObject(object $obj) ;
 
+	//abstract public function loadPage(string $requestedPage, array $params) : void;
+	public function loadPage(string $requestedPage, array $params) : void {
+		try {
+			$pagesDir = Configuration::Get('PagesDir'); 
+			if (empty($pagesDir)) {
+				$errmsg = Log::Error("PagesDir in Configuration is empty or not defined");
+				throw new \Exception($errmsg, 500);
+			}
+
+			$rootDir = Configuration::GetRootDir();
+			$pagesDir = implode(DIRECTORY_SEPARATOR, [$rootDir, $pagesDir]);
+			$pagefilepath = $this->getPageFilePath($pagesDir, $requestedPage);
+
+			// $this->setTitle("Default Halaman");
+
+			Log::Info("rendering file $pagefilepath");
+			$this->renderPageFile($pagefilepath, $params);
+		} catch (\Exception $ex) {
+			Log::Error($ex->getMessage());
+			throw $ex;
+		}
+	}
 
 	protected function setTitle(string $text) : void {
 		$this->_title = $text;
 	}
 
 
-	public static function GetWebPageObject($obj) : IWebPage  {
-		if (!in_array(IWebPage::class, class_implements($obj))) {
-			$classname = get_class($obj);
-			$errmsg = Log::Error("Class '$classname' not implements IWebPage");
-			throw new \Exception($errmsg, 500);
-		}
-		return $obj;
-	}
 
 
 
@@ -132,9 +146,9 @@ abstract class WebPage {
 			}
 			$this->setCurrentPageDir(dirname($pagefilepath));
 			
-			$tpl = $this->getTemplate();
-			$page = $this;
-			$CONTENTPARAMS = $PARAMS; 
+			// $tpl = $this->getTemplate();
+			// $page = $this;
+			// $CONTENTPARAMS = $PARAMS; 
 
 			require_once $pagefilepath;
 		} catch (\Exception $ex) {
